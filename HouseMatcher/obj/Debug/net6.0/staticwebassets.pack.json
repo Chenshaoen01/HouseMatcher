@@ -21,6 +21,18 @@
       "PackagePath": "staticwebassets\\ec48d584-af53-43f8-9c30-928cf4b230c9.jpg"
     },
     {
+      "Id": "C:\\Users\\User\\Desktop\\HouseMatcher\\HouseMatcher\\wwwroot\\f9519f2b-6c6b-4c97-975b-dfd0e37bf788.jpg",
+      "PackagePath": "staticwebassets\\f9519f2b-6c6b-4c97-975b-dfd0e37bf788.jpg"
+    },
+    {
+      "Id": "C:\\Users\\User\\Desktop\\HouseMatcher\\HouseMatcher\\wwwroot\\favicon.ico",
+      "PackagePath": "staticwebassets\\favicon.ico"
+    },
+    {
+      "Id": "C:\\Users\\User\\Desktop\\HouseMatcher\\HouseMatcher\\wwwroot\\house1.jpg",
+      "PackagePath": "staticwebassets\\house1.jpg"
+    },
+    {
       "Id": "C:\\Users\\User\\Desktop\\HouseMatcher\\HouseMatcher\\wwwroot\\js\\Chat.js",
       "PackagePath": "staticwebassets\\js\\Chat.js"
     },
@@ -2083,6 +2095,14 @@
     {
       "Id": "C:\\Users\\User\\Desktop\\HouseMatcher\\HouseMatcher\\wwwroot\\lib\\microsoft\\signalr\\src\\third-party-notices.txt",
       "PackagePath": "staticwebassets\\lib\\microsoft\\signalr\\src\\third-party-notices.txt"
+    },
+    {
+      "Id": "C:\\Users\\User\\Desktop\\HouseMatcher\\HouseMatcher\\wwwroot\\matcher-logo-rectangle.png",
+      "PackagePath": "staticwebassets\\matcher-logo-rectangle.png"
+    },
+    {
+      "Id": "C:\\Users\\User\\Desktop\\HouseMatcher\\HouseMatcher\\wwwroot\\matcher-logo-square.png",
+      "PackagePath": "staticwebassets\\matcher-logo-square.png"
     },
     {
       "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.HouseMatcher.Microsoft.AspNetCore.StaticWebAssets.props",

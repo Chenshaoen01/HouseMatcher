@@ -25,7 +25,10 @@
                 <div class="devider-light"></div>
                 @* 房屋圖片： *@
                 <div class="mt-3 mb-2 w-100">
-                    <p class="text-start mb-2 fw-bold">房屋圖片：</p>
+                    <div class="d-flex justify-content-start mb-2 fw-bold">
+                        <span class="me-3">房屋圖片：</span>
+                        <span id="house-img-validate-text" class="text-danger"></span>
+                    </div>
                     @{
                         string HouseImgUrl = "/" + CurrentHouseData.HouseImg;
 
@@ -45,7 +48,10 @@
                 </div>
                 @* 房屋名稱 *@
                 <div class="mb-3 w-100">
-                    <p class="text-start mb-2 fw-bold">房屋名稱：</p>
+                    <div class="d-flex justify-content-between mb-2 fw-bold">
+                        <span>房屋名稱：</span>
+                        <span id="house-name-validate-text" class="text-danger"></span>
+                    </div>
                     <label class="w-100">
                         <input type="text" id="house-name-input" class="w-100 form-input" value="@CurrentHouseData.HouseName" />
                     </label>
@@ -53,7 +59,10 @@
                 <div class="mb-3 w-100 d-flex flex-column flex-md-row">
                     @* 房屋大小 *@
                     <div class="w-100 w-md-50 pe-0 pe-md-2">
-                        <p class="text-start mb-2 fw-bold">房屋大小：</p>
+                        <div class="d-flex justify-content-between mb-2 fw-bold">
+                            <span>房屋大小：</span>
+                            <span id="house-size-validate-text" class="text-danger"></span>
+                        </div>
                         <div class="d-flex align-items-start">
                             <label class="w-100">
                                 <input id="house-size-input" type="number" class="w-100 form-input"
@@ -64,7 +73,10 @@
                     </div>
                     @* 月租金 *@
                     <div class="w-100 w-md-50 ps-0 ps-md-2">
-                        <p class="text-start mb-2 fw-bold">月租金：</p>
+                        <div class="d-flex justify-content-between mb-2 fw-bold">
+                            <span>房屋大小：</span>
+                            <span id="rent-validate-text" class="text-danger"></span>
+                        </div>
                         <div class="d-flex align-items-start">
                             <label class="w-100">
                                 <input id="rent-input" type="number" class="w-100 form-input"
@@ -123,19 +135,28 @@
                 <div class="address-box mb-3">
                     <div class="mb-3 w-100 d-flex flex-column flex-md-row">
                         <div class="w-100 w-md-50 pe-0 pe-md-2">
-                            <p class="text-start mb-2 fw-bold">縣市：</p>
+                            <div class="d-flex justify-content-between mb-2 fw-bold">
+                                <span>縣市：</span>
+                                <span id="city-validate-text" class="text-danger"></span>
+                            </div>
                             <select id="city-input" class="form-select border-dark" data-value="@CurrentHouseData.City">
                                 <option selected disabled>請選擇縣市</option>
                             </select>
                         </div>
                         <div class="w-100 w-md-50">
-                            <p class="text-start mb-2 fw-bold">鄉鎮市區：</p>
+                            <div class="d-flex justify-content-between mb-2 fw-bold">
+                                <span>鄉鎮市區：</span>
+                                <span id="district-validate-text" class="text-danger"></span>
+                            </div>
                             <select id="district-input" class="form-select border-dark" data-value="@CurrentHouseData.District">
                                 <option selected disabled>請選擇鄉鎮市區</option>
                             </select>
                         </div>
                         <div class="w-100 w-md-50 ps-0 ps-md-2">
-                            <p class="text-start mb-2 fw-bold">道路名稱：</p>
+                            <div class="d-flex justify-content-between mb-2 fw-bold">
+                                <span>道路名稱：</span>
+                                <span id="road-validate-text" class="text-danger"></span>
+                            </div>
                             <select id="road-input" class="form-select border-dark" data-value="@CurrentHouseData.Road">
                                 <option selected disabled>請選擇道路名稱</option>
                             </select>
@@ -163,7 +184,10 @@
                 </div>
                 @* 房屋描述 *@
                 <div class="mb-3">
-                    <p class="text-start mb-2 fw-bold">詳細地址：</p>
+                    <div class="d-flex justify-content-between mb-2 fw-bold">
+                        <span>房屋描述：</span>
+                        <span id="description-validate-text" class="text-danger"></span>
+                    </div>
                     <div id="form-editor" class="w-100">
                         @Html.Raw(CurrentHouseData.Description)
                     </div>
@@ -181,7 +205,19 @@
 </div>
 
 <script src="~/js/CityData.js"></script>
+<script src="~/js/valiate.js"></script>
 <script>
+    const validateDataList = [
+        { columnKey: 'HouseImg', columnName: '房屋圖片', validateTextId: 'house-img-validate-text', rule: ['required'] },
+        { columnKey: 'HouseName', columnName: '房屋名稱', validateTextId: 'house-name-validate-text', rule: ['required'] },
+        { columnKey: 'HouseSize', columnName: '房屋大小', validateTextId: 'house-size-validate-text', rule: ['required', 'positive-number'] },
+        { columnKey: 'RentPerMonth', columnName: '月租金', validateTextId: 'rent-validate-text', rule: ['required', 'positive-number'] },
+        { columnKey: 'City', columnName: '縣市', validateTextId: 'city-validate-text', rule: ['required'] },
+        { columnKey: 'District', columnName: '鄉鎮市區', validateTextId: 'district-validate-text', rule: ['required'] },
+        { columnKey: 'Road', columnName: '道路名稱', validateTextId: 'road-validate-text', rule: ['required'] },
+        { columnKey: 'Description', columnName: '房屋描述', validateTextId: 'description-validate-text', rule: ['required'] }
+    ]
+
     let formMode = "post"
 
     const imageInput = document.getElementById('image-input')
@@ -328,23 +364,30 @@
 
         if (imgState === 'origin') {
             submitData.HouseImg = $('#form-img').data('origin-img-url')
-        }
-        else if (imgState === 'new') {
-            await imgUpload().then((res) => {
-                submitData.HouseImg = res.id + res.fileType
-            })
+        } else if (imgState === 'new') {
+            if ($('#image-input')[0].files && $('#image-input')[0].files[0]) {
+                submitData.HouseImg = $('#image-input')[0].files[0]
+            }
         }
 
-        $.ajax({
-            url: formMode === 'post' ? '@Url.Action("HousePost", "House")' : '@Url.Action("HousePut", "House")',
-            method: formMode,
-            data: JSON.stringify(submitData),
-            contentType: 'application/json',
-            success: function(res) {
-                saveMessageAndRefresh(res)
-            },
-            error: function (err) { console.log(err) },
-        });
+        if (validateBeforeSubmit(validateDataList, submitData)) {
+            if (imgState === 'new') {
+                await imgUpload().then((res) => {
+                    submitData.HouseImg = res.id + res.fileType
+                })
+            }
+
+            $.ajax({
+                url: formMode === 'post' ? '@Url.Action("HousePost", "House")' : '@Url.Action("HousePut", "House")',
+                method: formMode,
+                data: JSON.stringify(submitData),
+                contentType: 'application/json',
+                success: function (res) {
+                    saveMessageAndRefresh(res)
+                },
+                error: function (err) { console.log(err) },
+            });
+        }
     })
 
     // 寫入縣市選項、原先的鄉鎮市區/道路名稱、更新詳細地址
