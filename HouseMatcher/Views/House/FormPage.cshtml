@@ -1,0 +1,186 @@
+﻿
+<body>
+    <div class="d-flex justify-content-center py-5">
+        <div class="main-content white-card">
+            <div class="w-100 d-flex justify-content-center">
+                <img src="/matcher-logo-square.png" class="logo-img mb-3 mx-auto" />
+            </div>
+            <div class="mb-2 w-100">
+                <p class="text-start mb-2 fw-bold">房屋圖片：</p>
+                <div class="mb-3">
+                    <label for="image-input" class="form-label">
+                        <input id="image-input" class="form-control" type="file">
+                    </label>
+                </div>
+                <div class="d-flex justify-content-center align-items-start">
+                    <img src="" class="w-50 form-img d-none" />
+                    <button id="delete-img-button" type="button" class="btn btn-danger d-none">刪除</button>
+                </div>
+            </div>
+            <div class="mb-2 w-100">
+                <p class="text-start mb-2 fw-bold">房屋名稱：</p>
+                <label class="mb-3 w-100">
+                    <input type="text" id="email-input" class="w-100 form-input" />
+                </label>
+            </div>
+            <div class="mb-2 w-100">
+                <p class="text-start mb-2 fw-bold">月租金：</p>
+                <label class="mb-3 w-100">
+                    <input type="number" id="rent-per-month" class="w-100 form-input" />
+                </label>
+            </div>
+            <div class="mb-3">
+                <p class="text-start mb-2 fw-bold">房屋地址：</p>
+                <label class="mb-3 w-100">
+                    <input type="text" id="address-input" class="w-100 form-input" />
+                </label>
+                <div id="map" class="map-box"></div>
+            </div>
+            <div class="mb-3">
+                <p class="text-start mb-2 fw-bold">房屋描述：</p>
+                <div id="editor" class="w-100">
+                    <p>This is some sample content.</p>
+                </div>
+            </div>
+            <div class="w-100 d-flex justify-content-center">
+                <button id="login-button" class="btn bg-blue border border-dark fw-bold">送出</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <script>
+        (g => { var h, a, k, p = "The Google Maps JavaScript API", c = "google", l = "importLibrary", q = "__ib__", m = document, b = window; b = b[c] || (b[c] = {}); var d = b.maps || (b.maps = {}), r = new Set, e = new URLSearchParams, u = () => h || (h = new Promise(async (f, n) => { await (a = m.createElement("script")); e.set("libraries", [...r] + ""); for (k in g) e.set(k.replace(/[A-Z]/g, t => "_" + t[0].toLowerCase()), g[k]); e.set("callback", c + ".maps." + q); a.src = `https://maps.${c}apis.com/maps/api/js?` + e; d[q] = f; a.onerror = () => h = n(Error(p + " could not load.")); a.nonce = m.querySelector("script[nonce]")?.nonce || ""; m.head.append(a) })); d[l] ? console.warn(p + " only loads once. Ignoring:", g) : d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n)) })({
+            key: "AIzaSyDoBWMwyPz6_nD11FUIXwFSwA51ErW1KfY",
+            v: "weekly",
+            // Use the 'v' parameter to indicate the version to use (weekly, beta, alpha, etc.).
+            // Add other bootstrap parameters as needed, using camel case.
+        });
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDoBWMwyPz6_nD11FUIXwFSwA51ErW1KfY&callback=initMap&v=weekly"
+            defer></script>
+    <script>
+        const imageInput = document.getElementById('image-input')
+        imageInput.addEventListener('change', function() {
+            if (imageInput.files && imageInput.files[0]) {
+                const reader = new FileReader
+                reader.onload = function(e) {
+                    $('#image-input').addClass('d-none')
+
+                    $('.form-img').removeClass('d-none')
+                    $('#delete-img-button').removeClass('d-none')
+
+                    $('.form-img').attr('src', e.target.result)
+                }
+
+                reader.readAsDataURL(imageInput.files[0])
+            }else{
+
+            }
+        })
+
+        $(document).on('click', '#delete-img-button', function(){
+            $('#image-input').removeClass('d-none')
+
+            $('.form-img').addClass('d-none')
+            $('#delete-img-button').addClass('d-none')
+
+            imageInput.value = ''
+        })
+    </script>
+    <script>
+       let map;
+       let marker;
+       let geocoder;
+       let responseDiv;
+       let response;
+
+       async function initMap() {
+           map = new google.maps.Map(document.getElementById("map"), {
+               zoom: 10,
+               center: { lat: 25.018009239360595, lng: 121.51757246527319 },
+               mapTypeControl: false,
+           });
+           geocoder = new google.maps.Geocoder();
+
+           const addressInput = document.getElementById("address-input")
+
+           response = document.createElement("pre");
+           response.id = "response";
+           response.innerText = "";
+           responseDiv = document.createElement("div");
+           responseDiv.id = "response-container";
+           responseDiv.appendChild(response);
+           map.controls[google.maps.ControlPosition.LEFT_TOP].push(responseDiv);
+
+           marker = new google.maps.Marker({
+               map,
+           });
+           addressInput.addEventListener("change", () =>
+               geocode({ address: addressInput.value }),
+           );
+
+           clear();
+       }
+
+       function clear() {
+           marker.setMap(null);
+           responseDiv.style.display = "none";
+       }
+
+       function geocode(request) {
+           clear();
+           geocoder
+               .geocode(request)
+               .then((result) => {
+                   const { results } = result;
+                   addMarker(results[0])
+
+                   map.setCenter(results[0].geometry.location);
+                   map.setZoom(15);
+                   marker.setPosition(results[0].geometry.location);
+                   marker.setMap(map);
+                   // responseDiv.style.display = "block";
+                   // response.innerText = JSON.stringify(result, null, 2);
+                   return results;
+               })
+               .catch((e) => {
+                   alert("Geocode was not successful for the following reason: " + e);
+               });
+       }
+
+       function addMarker(result) {
+           console.log(result)
+           const contentString = `<div class="bg-light px-4 py-1">${result.formatted_address}</div>`
+
+           const infowindow = new google.maps.InfoWindow({
+               content: contentString,
+               ariaLabel: result.formatted_address,
+           });
+
+           const location = result.geometry.location
+           const targetLat = location ? location.lat() : -25.363
+           const targetLng = location ? location.lng() : 131.044
+           const targetPosition = { lat: targetLat, lng: targetLng };
+           const marker = new google.maps.Marker({
+               position: targetPosition, map, title: result.formatted_address,
+           });
+
+           infowindow.open({ anchor: marker, map });
+       }
+
+       window.initMap = initMap;
+    </script>
+
+   <script src="/js/CkeditorImageUploads.js"></script>
+   <script src="/js/ckeditor.js"></script>
+   <script>
+       ClassicEditor
+           .create(document.querySelector('#editor'), {
+               extraPlugins: [MyCustomUploadAdapterPlugin],})
+           .catch(error => {
+               console.log(error);
+           });
+   </script>
+</body>
+

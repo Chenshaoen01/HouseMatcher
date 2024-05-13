@@ -1,0 +1,152 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>@ViewData["Title"] - HouseMatcher</title>
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    
+        <link rel="stylesheet" href="~/lib/OwlCarousel2/assets/owl.carousel.css" />
+        <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/HouseMatcher.styles.css" asp-append-version="true" />
+    </head>
+    <body>
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="~/lib/OwlCarousel2/owl.carousel.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+        <script src="~/js/search.js"></script>
+        
+        <div class="body-area">
+            <div>
+                <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white">
+                    <div class="container-fluid">
+                        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                            <img src="/matcher-logo-rectangle.png" class="logo-img-rectangle mb-3" />
+                        </a>
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                                aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                            <ul class="navbar-nav flex-grow-1">
+                                <li class="nav-item">
+                                <a class="nav-link text-dark" href="@Url.Action("Search", "House", new { Page = 1 })">找好房</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="House" asp-action="SearchMap">地圖尋屋</a>
+                                </li>
+                                <li class="nav-item ms-0 ms-sm-auto pt-2">
+                                    <div class="d-flex align-items-center">
+                                        @{
+                                            if (User.Identity.IsAuthenticated)
+                                            {
+                                                string UserId = @User.FindFirst(type => type.Type == "UserId").Value;
+                                                string UserImg = @User.FindFirst(type => type.Type == "UserImg").Value;
+                                                string UserImgUrl = '/' + UserImg;
+                                                <div class="cursor-pointer d-flex align-items-center w-100" data-bs-toggle="collapse" data-bs-target="#user-link-box">
+                                                    <span class="user-nav-bar-image" style="background-image: url('@UserImgUrl')"></span>
+                                                    <span class="me-3 fw-bold" data-user-id="@UserId">@User.Identity.Name</span>
+                                                </div>
+                                                <div class="user-link-box collapse" id="user-link-box">
+                                                    <a class="user-link-box-item text-dark" asp-controller="User" asp-action="UserInfo">個人資訊</a>
+                                                    <a class="user-link-box-item text-dark" asp-controller="Message" asp-action="Index">訊息</a>
+                                                    <a class="user-link-box-item text-dark" asp-controller="House" asp-action="ManageList">房屋刊登管理</a>
+                                                    <span class="user-link-box-item cursor-pointer" id="log-out">登出</span>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="d-flex align-items-center">
+                                                    <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="LoginPage">登入</a>
+                                                    <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="RegisterPage">註冊</a>
+                                                </div>
+                                            }
+                                        }
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+                @RenderBody()
+            </div>
+            <div class="bg-white py-5">
+                <div class="d-flex flex-column flex-md-row justify-content-center align-items-center">
+                    <img src="/matcher-logo-square.png" class="logo-img-lg my-4 mx-5" />
+                    <div class="d-flex flex-column border-dark border-top border-bottom">
+                        <p class="fw-bold text-black pt-3">Facebook：HouseMather</p>
+                        <p class="fw-bold text-black">Instagram：HouseMather</p>
+                        <p class="fw-bold text-black">Line：HouseMather</p>
+                        <p class="fw-bold text-black">Email：HouseMather@@email.com</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="hint-modal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                <div class="modal-header bg-blue">
+                        <h1 class="modal-title fs-5 fw-bold">系統提示</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div id="hint-content" class="modal-body text-center fw-bold fs-5 pb-4 pt-5">
+                        提示內容
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="custom-button bg-secondary" data-bs-dismiss="modal"  aria-label="Close">確認</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @await RenderSectionAsync("Scripts", required: false)
+    
+        <script>
+        $(document).ready(function () {
+            $(document).on("click", "#log-out", function () {
+                $.ajax({
+                    url: window.location.origin + "/User/Logout",
+                    method: "POST",
+                    data: JSON.stringify({}),
+                    contentType: 'application/json',
+                    success: function (res) {
+                        window.location = window.location.origin + '/User/LoginPage'
+                    },
+                    error: function (err) { console.log(err) },
+                });
+            })
+        })
+
+        function saveMessageAndRefresh(hintMessage) {
+            localStorage.setItem("hintMessage", "儲存成功")
+            location.reload();
+        }
+
+        function saveMessageAndRederict(hintMessage, targetUrl) {
+            localStorage.setItem("hintMessage", hintMessage)
+            window.location = targetUrl
+        }
+
+        function checkHasMessageAndShowHint() {
+            const hintMessage = localStorage.getItem("hintMessage");
+            if(hintMessage) {
+                showHint(hintMessage)
+                localStorage.setItem("hintMessage", "");
+            }
+        }
+        checkHasMessageAndShowHint()
+
+        function showHint(hintMessage) {
+            const hintModal = new bootstrap.Modal('#hint-modal', {
+                keyboard: false
+            })
+
+            const hintContent = document.getElementById('hint-content')
+            hintContent.innerHTML = hintMessage
+
+            hintModal.show()
+        }
+        </script>
+    </body>
+</html>

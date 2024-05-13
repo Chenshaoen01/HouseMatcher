@@ -1,0 +1,615 @@
+﻿@using System.Text.Json
+@using System.Web
+<div class="modal fade" id="form-modal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            @{
+                HouseDataGetDto CurrentHouseData = new HouseDataGetDto();
+                if (ViewBag.IsEdit)
+                {
+                    CurrentHouseData = Model.HouseList[0];
+                }
+            }
+            <div class="modal-header border-0">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+             </div>
+            <div class="modal-body">
+                <span id="house-id" class="d-none" data-house-id="@CurrentHouseData.HouseId"></span>
+                <div class="w-100 d-flex justify-content-center">
+                    <img src="/matcher-logo-square.png" class="logo-img-sm mb-1 mx-auto" />
+                </div>
+                @{
+                    string StateString = ViewBag.IsEdit ? "編輯房屋資訊" : "新增房屋資訊";
+                }
+                <p class="fs-5 fw-bold text-center mb-3">@StateString</p>
+                <div class="devider-light"></div>
+                @* 房屋圖片： *@
+                <div class="mt-3 mb-2 w-100">
+                    <p class="text-start mb-2 fw-bold">房屋圖片：</p>
+                    @{
+                        string HouseImgUrl = "/" + CurrentHouseData.HouseImg;
+
+                        bool isImgExist = ViewBag.IsEdit && CurrentHouseData.HouseImg != null && CurrentHouseData.HouseImg != "";
+
+                        string inputDisplay = isImgExist ? "d-none" : "d-block";
+                        string imgAndDeleteButtonDisplay = isImgExist ? "d-block" : "d-none";
+                    }
+                    <div class="d-flex justify-content-start align-items-start">
+                        <img id="form-img" src="@HouseImgUrl" class="w-50 form-img @imgAndDeleteButtonDisplay"
+                             data-origin-img-url="@CurrentHouseData.HouseImg" />
+                        <button id="delete-img-button" type="button" class="ms-3 custom-button custom-button-red @imgAndDeleteButtonDisplay">刪除</button>
+                    </div>
+                    <label for="image-input" class="form-label">
+                        <input id="image-input" class="form-control @inputDisplay" type="file">
+                    </label>
+                </div>
+                @* 房屋名稱 *@
+                <div class="mb-3 w-100">
+                    <p class="text-start mb-2 fw-bold">房屋名稱：</p>
+                    <label class="w-100">
+                        <input type="text" id="house-name-input" class="w-100 form-input" value="@CurrentHouseData.HouseName" />
+                    </label>
+                </div>
+                <div class="mb-3 w-100 d-flex flex-column flex-md-row">
+                    @* 房屋大小 *@
+                    <div class="w-100 w-md-50 pe-0 pe-md-2">
+                        <p class="text-start mb-2 fw-bold">房屋大小：</p>
+                        <div class="d-flex align-items-start">
+                            <label class="w-100">
+                                <input id="house-size-input" type="number" class="w-100 form-input"
+                                       value="@CurrentHouseData.HouseSize" />
+                            </label>
+                            <span class="ms-2 mt-1 text-nowrap">坪</span>
+                        </div>
+                    </div>
+                    @* 月租金 *@
+                    <div class="w-100 w-md-50 ps-0 ps-md-2">
+                        <p class="text-start mb-2 fw-bold">月租金：</p>
+                        <div class="d-flex align-items-start">
+                            <label class="w-100">
+                                <input id="rent-input" type="number" class="w-100 form-input"
+                                       value="@CurrentHouseData.RentPerMonth" />
+                            </label>
+                            <span class="ms-2 mt-1 text-nowrap">元 / 月</span>
+                        </div>
+                    </div>
+                </div>
+                @* 房屋特色 *@
+                <div class="mb-3 w-100 d-flex flex-column flex-md-row">
+                    <div class="w-100 w-md-50">
+                        <div class="d-flex flex-column justify-content-start align-items-start">
+                            <p class="text-start mb-2 fw-bold">房屋特色</p>
+                            <div id="feature-custom-select" class="custom-select w-100" data-placeholder="請選擇租屋條件">
+                                <div class="custom-select-value custom-select-value-high">
+                                    @{
+                                        int selectedLabelCount = 0;
+                                        if (CurrentHouseData.FeaturLabelList != null)
+                                        {
+                                            selectedLabelCount = CurrentHouseData.FeaturLabelList.Count;
+                                        }
+                                        string SelectedValueText = selectedLabelCount > 0 ? "已選" + selectedLabelCount.ToString() : "請選擇租屋條件";
+                                    }
+                                    <span class="custom-select-value-text">@SelectedValueText</span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor"
+                                         class="custom-select-arrow custom-select-arrow-reverse bi bi-chevron-down" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708" />
+                                    </svg>
+                                </div>
+                                <div class="custom-options d-none">
+                                    @{
+                                        if (Model.FeatureList != null)
+                                        {
+                                            List<Guid> SelectedLabelsIdList = new List<Guid>();
+                                            if (CurrentHouseData.FeaturLabelList != null)
+                                            {
+                                                SelectedLabelsIdList = CurrentHouseData.FeaturLabelList.ConvertAll<Guid>(data => data.LabelId).ToList();
+                                            }
+                                            foreach (var feature in Model.FeatureList)
+                                            {
+                                                string selectedClassString = SelectedLabelsIdList.Contains(feature.LabelId) ? "custom-selected-option" : "";
+                                                <div class="custom-option @selectedClassString" data-value="@feature.LabelId" data-name="@feature.LabelName">
+                                                    @feature.LabelName
+                                                </div>
+                                            }
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @* 房屋所在縣市/鄉鎮市區 *@
+                <p class="text-start mb-2 fw-bold">房屋地址：</p>
+                <div class="address-box mb-3">
+                    <div class="mb-3 w-100 d-flex flex-column flex-md-row">
+                        <div class="w-100 w-md-50 pe-0 pe-md-2">
+                            <p class="text-start mb-2 fw-bold">縣市：</p>
+                            <select id="city-input" class="form-select border-dark" data-value="@CurrentHouseData.City">
+                                <option selected disabled>請選擇縣市</option>
+                            </select>
+                        </div>
+                        <div class="w-100 w-md-50">
+                            <p class="text-start mb-2 fw-bold">鄉鎮市區：</p>
+                            <select id="district-input" class="form-select border-dark" data-value="@CurrentHouseData.District">
+                                <option selected disabled>請選擇鄉鎮市區</option>
+                            </select>
+                        </div>
+                        <div class="w-100 w-md-50 ps-0 ps-md-2">
+                            <p class="text-start mb-2 fw-bold">道路名稱：</p>
+                            <select id="road-input" class="form-select border-dark" data-value="@CurrentHouseData.Road">
+                                <option selected disabled>請選擇道路名稱</option>
+                            </select>
+                        </div>
+                    </div>
+                    @* 詳細地址 *@
+                    <div class="mb-3">
+                        <div class="text-start mb-2 fw-bold">
+                            <span>詳細地址：</span>
+                            <span id="detail-address-hint"></span>
+                        </div>
+                        <label class="mb-3 w-100 d-flex align-items-center">
+                            <span id="detail-address-first-part" class="fs-6 fw-bold text-nowrap text-secondary me-2 d-none">
+                                <span id="detail-address-city"></span>
+                                <span id="detail-address-district"></span>
+                                <span id="detail-address-road"></span>
+                            </span>
+                            <input id="address-input" type="text" class="w-100 form-input fs-6"
+                                   value="@CurrentHouseData.Location" disabled/>
+                        </label>
+                    </div>
+                    <span id="address-lat" data-value="@CurrentHouseData.Latitude"></span>
+                    <span id="address-lng" data-value="@CurrentHouseData.Longitude"></span>
+                    <div id="map" class="map-box"></div>
+                </div>
+                @* 房屋描述 *@
+                <div class="mb-3">
+                    <p class="text-start mb-2 fw-bold">詳細地址：</p>
+                    <div id="form-editor" class="w-100">
+                        @Html.Raw(CurrentHouseData.Description)
+                    </div>
+                </div>
+            </div>
+            @* 送出按鈕 *@
+            <div class="modal-footer border-0">
+                <div class="w-100 d-flex justify-content-center">
+                    <button id="form-post-submit" class="form-submit-button custom-button d-none">建立</button>
+                    <button id="form-put-submit" class="form-submit-button custom-button d-none">儲存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/js/CityData.js"></script>
+<script>
+    let formMode = "post"
+
+    const imageInput = document.getElementById('image-input')
+    const isOriginImgExist = $('#form-img').data('origin-img-url') !== null && $('#form-img').data('origin-img-url') !== ""
+    let imgState = isOriginImgExist ? 'origin' : 'empty'
+    // 加入圖片後顯示於畫面上
+    imageInput.addEventListener('change', function () {
+        imgState = 'new'
+        if ($('#image-input')[0].files && $('#image-input')[0].files[0]) {
+            const reader = new FileReader
+            reader.onload = function (e) {
+                $('#image-input').addClass('d-none')
+
+                $('.form-img').removeClass('d-none')
+                $('#delete-img-button').removeClass('d-none')
+
+                $('.form-img').attr('src', e.target.result)
+            }
+            reader.readAsDataURL($('#image-input')[0].files[0])
+        }
+    })
+
+    // 移除圖片按鈕點擊事件
+    $(document).on('click', '#delete-img-button', function () {
+        imgState = 'empty'
+        $('#image-input').removeClass('d-none')
+
+        $('.form-img').addClass('d-none')
+        $('#delete-img-button').addClass('d-none')
+
+        imageInput.value = ''
+    })
+
+    // 新增模式按鈕點擊事件：開啟視窗、切換模式、切換按鈕
+    $(document).on('click', '#create-button', function () {
+        formMode = "post"
+        $('#form-post-submit').removeClass('d-none')
+        $('#form-put-submit').addClass('d-none')
+    })
+
+    // 編輯模式按鈕點擊事件：開啟視窗、切換模式、切換按鈕
+    $(document).on('click', '#edit-button', function () {
+        formMode = "put"
+        $('#form-post-submit').addClass('d-none')
+        $('#form-put-submit').removeClass('d-none')
+
+        // 編輯模式設定地圖中心、放置圖釘
+        const preLat = $('#address-lat').data('value')
+        const preLng = $('#address-lng').data('value')
+
+        lat = preLat
+        lng = preLng
+
+        map.setZoom(15);
+        map.setCenter({
+            lat: preLat,
+            lng: preLng
+        });
+        addMarker(getCurrentAddress(), preLat, preLng)
+    })
+
+    // 上傳圖片
+    function imgUpload() {
+        return new Promise((resolve, reject) => {
+            if ($('#image-input')[0].files && $('#image-input')[0].files[0]) {
+                const formData = new FormData();
+                formData.append('file', $('#image-input')[0].files[0]);
+                $.ajax({
+                    url: '@Url.Action("Post", "FileUpload")',
+                    method: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (res) { resolve(res) },
+                });
+            } else {
+                resolve("")
+            }
+
+        })
+    }
+
+    // 取得被選取的房屋特色標籤
+    function getFeatureLabelPostData() {
+        const selectedData = []
+        const selectedFeatureLabel = $('#feature-custom-select').find('.custom-option')
+        selectedFeatureLabel.each((index, item) => {
+            const labelId = $(item).data('value')
+            const isOriginSelected = originSelectedLabel.indexOf(labelId) !== -1
+            const isCurrentSelected = $(item).hasClass('custom-selected-option')
+
+            if (isCurrentSelected) {
+                const entityState = isOriginSelected ? "NotModified" : "Added"
+                selectedData.push({
+                    labelId: $(item).data('value'),
+                    labelName: $(item).data('name'),
+                    EntitySate: entityState
+                })
+            } else {
+                if (isOriginSelected) {
+                    selectedData.push({
+                        labelId: $(item).data('value'),
+                        labelName: $(item).data('name'),
+                        EntitySate: "Deleted"
+                    })
+                }
+            }
+        })
+        return selectedData
+    }
+
+
+    // 取得被選取的房屋特色標籤
+    function getSelectedFeatureLabelId() {
+        const selectedDataIdList = []
+        const selectedFeatureLabel = $('#feature-custom-select').find('.custom-selected-option')
+        selectedFeatureLabel.each((index, item) => {
+            selectedDataIdList.push($(item).data('value'))
+        })
+        return selectedDataIdList
+    }
+
+    const originSelectedLabel = getSelectedFeatureLabelId()
+
+    // 送出按鈕點擊事件
+    $(document).on('click', '.form-submit-button',async function () {
+        const submitData = {
+           HouseName: $('#house-name-input').val(),
+           Description: editor.getData(),
+           Location: $('#address-input').val(),
+           HouseSize: parseInt($('#house-size-input').val()),
+           RentPerMonth: parseInt($('#rent-input').val()),
+           City: $('#city-input').val(),
+           District: $('#district-input').val(),
+           Road: $('#road-input').val(),
+           Latitude: lat,
+           Longitude: lng,
+           FeaturLabelList: getFeatureLabelPostData(),
+           HouseImg: ""
+        }
+        if(formMode === 'put') {
+            submitData.HouseId = $('#house-id').data('house-id')
+        }
+
+        if (imgState === 'origin') {
+            submitData.HouseImg = $('#form-img').data('origin-img-url')
+        }
+        else if (imgState === 'new') {
+            await imgUpload().then((res) => {
+                submitData.HouseImg = res.id + res.fileType
+            })
+        }
+
+        $.ajax({
+            url: formMode === 'post' ? '@Url.Action("HousePost", "House")' : '@Url.Action("HousePut", "House")',
+            method: formMode,
+            data: JSON.stringify(submitData),
+            contentType: 'application/json',
+            success: function(res) {
+                saveMessageAndRefresh(res)
+            },
+            error: function (err) { console.log(err) },
+        });
+    })
+
+    // 寫入縣市選項、原先的鄉鎮市區/道路名稱、更新詳細地址
+    const currentCity = $('#city-input').data('value')
+    cityData.forEach(city => {
+        if (city.CityEngName !== "Diauyutai") {
+            const selectedString = currentCity === city.CityName ? 'selected' : ''
+            $('#city-input').append(`<option value="${city.CityName}" ${selectedString}>${city.CityName}</option>`)
+        }
+    })
+
+    const currentDistrict = $('#district-input').data('value')
+    if (currentCity) {
+        setDictrictItem(currentCity, currentDistrict)
+    }
+
+    const currentRoad = $('#road-input').data('value')
+    if (currentRoad) {
+        setRoadItem(currentCity, currentDistrict, currentRoad)
+    }
+
+    setDetailAddress()
+
+    // 選擇縣市後：調整鄉鎮市區選項
+    $(document).on('change', '#city-input', function () {
+        const targetCity = $('#city-input').val()
+
+        // 清空道路選項
+        resetRoadSelect()
+        // 設定鄉鎮市區選項
+        setDictrictItem(targetCity)
+        // 更新詳細地址
+        setDetailAddress()
+    })
+
+    function setDictrictItem(targetCity, selectedDistrict) {
+        const targetCityData = cityData.filter(city => {
+            return city.CityName === targetCity
+        })
+
+        if (targetCityData.length > 0) {
+            resetDistrictSelect()
+            targetCityData[0].AreaList.forEach(area => {
+                const selectedString = selectedDistrict === area.AreaName ? 'selected' : ''
+                $('#district-input').append(`<option value="${area.AreaName}" ${selectedString}>${area.AreaName}</option>`)
+            })
+        }
+    }
+
+    function resetDistrictSelect() {
+        $('#district-input').html('<option selected disabled>請選擇鄉鎮市區</option>')
+    }
+
+    // 選擇鄉鎮市區選項後調整道路選項
+    $(document).on('change', '#district-input', function () {
+        const targetCity = $('#city-input').val()
+        const targetDistrict = $('#district-input').val()
+
+        // 設定道路選項
+        setRoadItem(targetCity, targetDistrict)
+        // 更新詳細地址
+        setDetailAddress()
+    })
+
+    function setRoadItem(targetCity, targetDistrict, selectedRoad) {
+        const targetCityData = cityData.filter(city => {
+            return city.CityName === targetCity
+        })
+
+        const targetDistrictData = targetCityData.length > 0 ? targetCityData[0].AreaList.filter(area => area.AreaName === targetDistrict) : []
+
+        if (targetDistrictData.length > 0) {
+            resetRoadSelect()
+            targetDistrictData[0].RoadList.forEach(road => {
+                const selectedString = selectedRoad === road.RoadName ? 'selected' : ''
+                $('#road-input').append(`<option value="${road.RoadName}" ${selectedString}>${road.RoadName}</option>`)
+            })
+        }
+    }
+
+    function resetRoadSelect() {
+        $('#road-input').html('<option selected disabled>請選擇道路名稱</option>')
+    }
+
+    // 選擇道路名稱選項後
+    $(document).on('change', '#road-input', function () {
+        // 清空地址內容
+        $('#address-input').val('')
+        // 更新詳細地址
+        setDetailAddress()
+    })
+
+    // 更新詳細地址
+    function setDetailAddress() {
+        const cityValue = $('#city-input').val()
+        const districtValue = $('#district-input').val()
+        const roadValue = $('#road-input').val()
+
+        $('#detail-address-city').text(cityValue)
+        $('#detail-address-district').text(districtValue)
+        $('#detail-address-road').text(roadValue)
+
+        if (isNotEmpty(cityValue)) {
+            $('#detail-address-first-part').removeClass('d-none')
+        }
+
+        const isAddressEditable = isNotEmpty(cityValue) && isNotEmpty(districtValue) && isNotEmpty(roadValue)
+        const addressInputPlaceHolder = isAddressEditable ? '例：XX 巷 XX 號 XX 樓' : '請先選擇縣市/鄉鎮市區/道路名稱'
+        $('#address-input').prop('disabled', !isAddressEditable)
+        $('#address-input').prop('placeholder', addressInputPlaceHolder)
+
+        if (!isAddressEditable) {
+            $('#address-input').val('')
+        }
+    }
+
+    function isNotEmpty(targetValue) {
+        return targetValue !== null && targetValue !== "" && targetValue !== undefined
+    }
+</script>
+
+@* 引入 google map api *@
+<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+<script>
+    (g => { var h, a, k, p = "The Google Maps JavaScript API", c = "google", l = "importLibrary", q = "__ib__", m = document, b = window; b = b[c] || (b[c] = {}); var d = b.maps || (b.maps = {}), r = new Set, e = new URLSearchParams, u = () => h || (h = new Promise(async (f, n) => { await (a = m.createElement("script")); e.set("libraries", [...r] + ""); for (k in g) e.set(k.replace(/[A-Z]/g, t => "_" + t[0].toLowerCase()), g[k]); e.set("callback", c + ".maps." + q); a.src = `https://maps.${c}apis.com/maps/api/js?` + e; d[q] = f; a.onerror = () => h = n(Error(p + " could not load.")); a.nonce = m.querySelector("script[nonce]")?.nonce || ""; m.head.append(a) })); d[l] ? console.warn(p + " only loads once. Ignoring:", g) : d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n)) })({
+        key: "AIzaSyDoBWMwyPz6_nD11FUIXwFSwA51ErW1KfY",
+        v: "weekly",
+        // Use the 'v' parameter to indicate the version to use (weekly, beta, alpha, etc.).
+        // Add other bootstrap parameters as needed, using camel case.
+    });
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDoBWMwyPz6_nD11FUIXwFSwA51ErW1KfY&callback=initMap&v=weekly"
+        defer></script>
+<script>
+    let map
+    let markerArr = []
+    let marker
+    let geocoder
+    let responseDiv
+    let response
+    let lat = null;
+    let lng = null;
+
+    // 地圖初始化
+    async function initMap() {
+        map = new google.maps.Map(document.getElementById("map"), {
+            zoom: 10,
+            center: { lat: 25.1, lng: 121.6 },
+            mapTypeControl: false,
+        });
+        geocoder = new google.maps.Geocoder();
+
+        const roadInput = document.getElementById("road-input")
+        const addressInput = document.getElementById("address-input")
+
+        marker = new google.maps.Marker({ map });
+
+        roadInput.addEventListener("change", function () {
+            doGeocode()
+        });
+
+        addressInput.addEventListener("change", function() {
+            doGeocode()
+        });
+    }
+
+    function doGeocode() {
+        const cityInput = $('#city-input').val()
+        const districtInput = $('#district-input').val()
+        const roadInput = $('#road-input').val()
+        const addressInput = $('#address-input').val()
+        geocode({ address: cityInput + districtInput + roadInput + addressInput })
+    }
+
+    // 輸入地址後定位geocode
+    function geocode(request) {
+        geocoder
+            .geocode(request)
+            .then((result) => {
+                const { results } = result;
+
+                const location = results[0].geometry.location
+                lat = location.lat()
+                lng = location.lng()
+
+                const cityValue = $('#city-input').val()
+                const districtValue = $('#district-input').val()
+                const roadValue = $('#road-input').val()
+                const addressValue = $('#address-input').val()
+
+                addMarker(getCurrentAddress(), lat, lng)
+
+                map.setCenter(results[0].geometry.location);
+                map.setZoom(15);
+                marker.setPosition(results[0].geometry.location);
+                marker.setMap(map);
+
+                return results
+            })
+    }
+
+    function getCurrentAddress() {
+        const cityValue = $('#city-input').val()
+        const districtValue = $('#district-input').val()
+        const roadValue = $('#road-input').val()
+        const addressValue = $('#address-input').val()
+
+        return cityValue + districtValue + roadValue + addressValue
+    }
+
+    function deleteAllMarkers() {
+        markerArr.forEach(currentMarker => {
+            currentMarker.setMap(null)
+        })
+    }
+
+    function addMarker(addressName, targetLat, targetLng) {
+        const contentString = `<div class="px-4 py-1">${addressName}</div>`
+
+        const newInfowindow = new google.maps.InfoWindow({
+            content: contentString,
+            ariaLabel: addressName,
+        });
+
+        const targetPosition = { lat: targetLat, lng: targetLng };
+
+        deleteAllMarkers()
+
+        const newMarker = new google.maps.Marker({
+            position: targetPosition, map, title: addressName,
+        });
+
+        markerArr.push(newMarker)
+
+        newMarker.addListener('click', function () {
+            if (isInfoWindowOpen(newInfowindow)) {
+                newInfowindow.close()
+            } else {
+                newInfowindow.open({ anchor: newMarker, map });
+            }
+        })
+    }
+
+
+    function isInfoWindowOpen(targetInfoWindow) {
+        const map = targetInfoWindow.getMap()
+        return (map !== null && typeof map !== "undefined");
+    }
+
+    window.initMap = initMap;
+</script>
+
+@* 引入 ckeditor *@
+<script src="/js/CkeditorImageUploads.js"></script>
+<script src="/js/ckeditor.js"></script>
+<script>
+    ClassicEditor
+        .create(document.querySelector('#form-editor'), {
+            extraPlugins: [MyCustomUploadAdapterPlugin],
+        })
+        .then(newEditor => {
+            editor = newEditor
+        })
+        .catch(error => {
+            console.log(error)
+        });
+</script>
+

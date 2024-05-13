@@ -1,0 +1,106 @@
+﻿@model HouseMatcher.Models.HouseListViewModel
+<div class="d-flex justify-content-center h-100">
+    @{
+        HouseDataGetDto DetailHouseData = Model.HouseList[0];
+        bool isHouseOwner = false;
+
+        if (User.Identity.IsAuthenticated)
+        {
+            string UserId = @User.FindFirst(type => type.Type == "UserId").Value;
+            isHouseOwner = UserId == DetailHouseData.UserId.ToString();
+        }
+    }
+    <div class="main-content my-5">
+        <div class="white-card">
+            <div class="d-flex align-items-start justify-content-between">
+                <p class="fs-5 fw-bold">@DetailHouseData.HouseName</p>
+                @{
+                    if (isHouseOwner)
+                    {
+                        <div class="d-flex">
+                            <button id="edit-button" class="custom-button custom-button-red me-2"
+                                    data-bs-toggle="modal" data-bs-target="#delete-hint-modal">
+                                刪除
+                            </button>
+                            <button id="edit-button" class="custom-button"
+                                    data-bs-toggle="modal" data-bs-target="#form-modal">
+                                編輯
+                            </button>
+                        </div>
+                    }
+                }
+            </div>
+            <p>NT$ @DetailHouseData.RentPerMonth /月</p>
+            @{
+                string HouseAddress = DetailHouseData.City + DetailHouseData.District + DetailHouseData.Road + DetailHouseData.Location;
+            }
+            <p>地點：@HouseAddress</p>
+            <p>坪數：@DetailHouseData.HouseSize 坪</p>
+            <div class="d-flex">
+                @{
+                    foreach (var feature in DetailHouseData.FeaturLabelList)
+                    {
+                        <span class="feature-label">@feature.LabelName</span>
+                    }
+                }
+            </div>
+            <div class="devider my-3"></div>
+            <div class="house-description-content">
+                @Html.Raw(DetailHouseData.Description)
+            </div>
+        </div>
+        @{
+            if (!isHouseOwner)
+            {
+                <div class="d-flex justify-content-center mt-4">
+                    <button id="message-modal-button" class="custom-button" data-bs-toggle="modal" data-bs-target="#form-modal">
+                        聯絡屋主
+                    </button>
+                </div>
+            }
+        }
+        
+        @* 刪除確認視窗 *@
+        <div class="modal fade" id="delete-hint-modal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-blue">
+                        <h1 class="modal-title fs-5 fw-bold">系統提示</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-center fw-bold fs-5 py-5">
+                        請確認是否刪除此筆房屋資料
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="custom-button bg-secondary me-2"
+                                data-bs-dismiss="modal" aria-label="Close">取消</button>
+                        <button id="delete-submit-button" type="button" class="custom-button custom-button-red"
+                                data-bs-dismiss="modal" aria-label="Close">確認</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@Html.Partial("Form")
+
+<script>
+    $(document).ready(function() {
+        // 送出按鈕點擊事件
+        $(document).on('click', '#delete-submit-button', async function () {
+            $.ajax({
+                url: '@Url.Action("HouseDelete", "House", new { id = DetailHouseData.HouseId })',
+                method: 'DELETE',
+                contentType: 'application/json',
+                success: function (res) {
+                    saveMessageAndRederict(res, '@Url.Action("ManageList", "House")')
+                },
+                error: function (err) {
+                    showHint(err.responseText)
+                },
+            });
+        })
+    })
+</script>
+
+

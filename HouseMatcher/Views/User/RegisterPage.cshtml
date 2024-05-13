@@ -1,0 +1,107 @@
+﻿<div class="d-flex justify-content-center">
+    <div class="main-content-sm py-5">
+        <div class="mx-auto p-4 d-flex flex-column align-items-end white-card card-w-md">
+            <img src="/matcher-logo-square.png" class="logo-img mb-3 mx-auto" />
+            <div class="mb-2 w-100">
+                <div class="d-flex justify-content-between mb-2 fw-bold">
+                    <span>姓名</span>
+                    <span id="user-name-validate-text" class="text-danger"></span>
+                </div>
+                <label class="mb-3 w-100">
+                    <input type="text" id="user-name" class="w-100 form-input" />
+                </label>
+            </div>
+            <div class="mb-2 w-100">
+                <div class="d-flex justify-content-between mb-2 fw-bold">
+                    <span>電子信箱</span>
+                    <span id="email-validate-text" class="text-danger"></span>
+                </div>
+                <label class="mb-3 w-100">
+                    <input type="text" id="email-input" class="w-100 form-input" />
+                </label>
+            </div>
+            <div class="mb-2 w-100">
+                <div class="d-flex justify-content-between mb-2 fw-bold">
+                    <span>密碼</span>
+                    <span id="password-validate-text" class="text-danger"></span>
+                </div>
+                <label class="mb-3 w-100">
+                    <input type="password" id="password-input" class="w-100 form-input" />
+                </label>
+            </div>
+            <div class="mb-2 w-100">
+                <div class="d-flex justify-content-between mb-2 fw-bold">
+                    <span>再次輸入密碼</span>
+                    <span id="password-confirm-validate-text" class="text-danger"></span>
+                </div>
+                <label class="mb-3 w-100">
+                    <input type="password" id="password-confirm" class="w-100 form-input" />
+                </label>
+            </div>
+            <button id="register-button" type="button" class="custom-button">註冊</button>
+        </div>
+    </div>
+</div>
+<script src="~/js/valiate.js"></script>
+<script>
+    const validateDataList = [
+        { columnId: 'user-name', columnName: '姓名', validateTextId: 'user-name-validate-text', rule: ['required'] },
+        { columnId: 'email-input', columnName: '電子信箱', validateTextId: 'email-validate-text', rule: ['required', 'email'] },
+        { columnId: 'password-input', columnName: '密碼', validateTextId: 'password-validate-text', rule: ['required'] },
+        { columnId: 'password-confirm', columnName: '再次輸入密碼', validateTextId: 'password-confirm-validate-text', rule: ['required'] }
+    ]
+
+    $(document).ready(function() {
+         $(document).on("click", "#register-button", function () {
+             const isValidate = validateBeforeSubmit(validateDataList)
+
+             const isEmailConfirmValidate = checkEmailCofirm()
+
+             if (isValidate && isEmailConfirmValidate) {
+                 const userName = $('#user-name').val();
+                 const emailValue = $('#email-input').val();
+                 const passwordValue = $('#password-input').val();
+                 const passwordConfirmValue = $('#password-confirm').val();
+                 if (passwordValue === passwordConfirmValue) {
+                     $.ajax({
+                         url: window.location.origin + "/User/Register",
+                         method: "POST",
+                         data: JSON.stringify({
+                             UserName: userName,
+                             UserEmail: emailValue,
+                             UserPassword: passwordValue
+                         }),
+                         contentType: 'application/json',
+                         success: function (res) {
+                             localStorage.setItem("hintMessage", "帳號建立成功")
+                             window.location.pathname = '/User/LoginPage'
+                         },
+                         error: function (err) { console.log(err) },
+                     });
+                 } else {
+                     showHint('再次輸入密碼與密碼不相符')
+                 }
+             }
+         })
+
+         function checkEmailCofirm() {
+              const passwordValue = $('#password-input').val();
+              const passwordConfirmValue = $('#password-confirm').val();
+
+              const isPasswordInValid = $('#password-validate-text').text() !== null && $('#password-validate-text').text() !== ""
+              const isPasswordConfirmInValid = $('#password-confirm-validate-text').text() !== null && $('#password-confirm-validate-text').text() !== ""
+
+              if (passwordValue !== passwordConfirmValue && !isPasswordInValid && !isPasswordConfirmInValid) {
+                  $('#password-confirm-validate-text').text('再次輸入密碼與密碼不相符')
+                  return false
+              }
+
+              return true
+         }
+    })
+
+    function setCookie(name,value) {
+        const bearerToken = "bearer " + value
+        document.cookie = name + "=" + bearerToken + "; path=/";
+    }
+</script>

@@ -1,0 +1,74 @@
+﻿@model HouseMatcher.Models.HouseListViewModel
+<div class="d-flex flex-column align-items-center justify-content-center h-100">
+    <div class="my-5 px-3 px-md-0 w-100 d-flex justify-content-center">
+        @Html.Partial("SearchArea")
+    </div>
+    <div class="main-content">
+        @{
+            foreach (var house in Model.HouseList)
+            {
+                string HouseImgUrl = "/"+ @house.HouseImg;
+                string HouseAddress = house.City + house.District + house.Road + house.Location;
+                <a href="@Url.Action("Detail", "House", new {Id = house.HouseId})" class="list-card-link d-block mb-5">
+                    <div class="list-card">
+                        <div class="list-card-img" style="background-image: url('@HouseImgUrl')"></div>
+                        <div class="list-card-content">
+                            <p class="list-card-content-title">@house.HouseName</p>
+                            <p class="list-card-content-text">NT$ @house.RentPerMonth/月</p>
+                            <p class="list-card-content-text">地點：@HouseAddress</p>
+                            <p class="list-card-content-text">坪數：@house.HouseSize 坪</p>
+                            <div class="d-flex">
+                                @{
+                                    foreach (var feature in house.FeaturLabelList)
+                                    {
+                                        <span class="feature-label">@feature.LabelName</span>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            }
+        }
+        <div class="d-flex justify-content-center mb-4">
+            @{
+                if (ViewBag.CurrentPage != 1)
+                {
+                    int targetPage = ViewBag.CurrentPage - 1;
+                    <span class="data-list-page-label" data-target-page="@targetPage">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
+                        </svg>
+                    </span>
+                }
+                for (int i = 1; i <= ViewBag.LastPage; i++)
+                {
+                    string selectedString = ViewBag.CurrentPage == i ? "selected" : "";
+                    <span class="data-list-page-label @selectedString" data-target-page="@i">@i</span>
+                }
+                if (ViewBag.CurrentPage != ViewBag.LastPage)
+                {
+                    int targetPage = ViewBag.CurrentPage + 1;
+                    <span class="data-list-page-label" data-target-page="@targetPage">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708" />
+                        </svg>
+                    </span>
+                }
+            }
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).on('click', '.data-list-page-label', function() {
+        const targetPage = $(this).data('target-page')
+
+        const searchUrl = new URL(window.location)
+        searchUrl.searchParams.set('Page', targetPage)
+        window.location = searchUrl
+    })
+</script>
+
+
+

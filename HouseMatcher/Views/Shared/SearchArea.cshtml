@@ -1,0 +1,203 @@
+﻿<div class="homepage-header-content">
+    <img src="/matcher-logo-square.png" class="logo-img mb-3" />
+    <div class="row w-100 mb-4 gy-4">
+        @* 租屋地點 *@
+        <div class="col-12 col-md-4">
+            <div class="d-flex flex-column justify-content-center align-items-center">
+                <span class="fw-bold mb-1">租屋地點</span>
+                <div class="custom-select w-100" data-select-type="multi-layer" data-placeholder="請選擇租屋條件">
+                    <div class="custom-select-value">
+                        <span class="custom-select-value-text">請選擇租屋條件</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor"
+                             class="custom-select-arrow custom-select-arrow-reverse bi bi-chevron-down" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708" />
+                        </svg>
+                    </div>
+                    <div class="custom-options-muti-layer">
+                        @* 縣市列表 *@
+                        <div id="city-options" class="custom-options-child-layer d-none custom-options-layer1"></div>
+                        @* 區域列表 *@
+                        <div id="district-options" class="custom-options-child-layer d-none custom-options-layer2"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @* 房租範圍 *@
+        <div class="col-12 col-md-4">
+            <div class="d-flex flex-column justify-content-center align-items-center">
+                <span class="fw-bold mb-1">房租範圍</span>
+                <div id="rent-custom-select" class="custom-select w-100" data-placeholder="請輸入房租範圍">
+                    <div class="custom-select-value">
+                        <span class="custom-select-value-text">請輸入房租範圍</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor"
+                             class="custom-select-arrow custom-select-arrow-reverse bi bi-chevron-down" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708" />
+                        </svg>
+                    </div>
+                    <div class="custom-options p-2 d-none">
+                        <div class="mb-3 w-100">
+                            <p class="text-start mb-0 fw-bold fs-7">房租最高：</p>
+                            <div class="d-flex align-items-start">
+                                <label class="mt-1 mb-0 w-100 pt-0">
+                                    <input type="number" id="rent-upper-limit" class="w-100 form-input form-input-sm rent-limit" />
+                                </label>
+                                <span class="ms-2 mt-1 text-nowrap">元 / 月</span>
+                            </div>
+                        </div>
+                        <div class="mb-0 w-100">
+                            <p class="text-start mb-0 fw-bold fs-7">房租最低：</p>
+                            <div class="d-flex align-items-start">
+                                <label class="mt-0 mb-0 w-100">
+                                    <input type="number" id="rent-lower-limit" class="w-100 form-input form-input-sm rent-limit" />
+                                </label>
+                                <span class="ms-2 mt-1 text-nowrap">元 / 月</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @* 租屋條件 *@
+        <div class="col-12 col-md-4">
+            <div class="d-flex flex-column justify-content-center align-items-center">
+                <span class="fw-bold mb-1">其他租屋條件</span>
+                <div class="custom-select w-100" data-placeholder="請選擇租屋條件">
+                    <div class="custom-select-value">
+                        <span class="custom-select-value-text">請選擇租屋條件</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor"
+                             class="custom-select-arrow custom-select-arrow-reverse bi bi-chevron-down" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708" />
+                        </svg>
+                    </div>
+                    <div id="feature-options" class="custom-options d-none">
+                        @{
+                            if (Model.FeatureList != null)
+                            {
+                                foreach (var feature in Model.FeatureList)
+                                {
+                                        <div class="custom-option" data-value="@feature.LabelId">@feature.LabelName</div>
+                                }
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button id="search-button" class="custom-button" type="button">查詢</button>
+</div>
+
+<script src="~/js/CityData.js"></script>
+<script>
+    $(document).ready(function () {
+
+        function getParams() {
+            const currentUrlItem = new URL(window.location)
+            return {
+                page: currentUrlItem.searchParams.get('Page'),
+                district: currentUrlItem.searchParams.get('Disctict'),
+                maxRent: currentUrlItem.searchParams.get('MaxRent'),
+                minRent: currentUrlItem.searchParams.get('MinRent'),
+                Feature: currentUrlItem.searchParams.get('Feature'),
+            }
+        }
+        const urlParams = getParams()
+
+        function notEmpty(targetValue) {
+            return targetValue !== null && targetValue !== "" && targetValue !== undefined
+        }
+
+        //更新其他租屋條件
+        if (notEmpty(urlParams.Feature)) {
+            const featureArr = urlParams.Feature.split('+')
+            featureArr.forEach(featureParam => {
+                $(`.custom-option[data-value="${featureParam}"]`).addClass('custom-selected-option')
+            })
+        }
+
+        const disctictArr = notEmpty(urlParams.district)? urlParams.district.split('+') : []
+        cityData.forEach(city => {
+            if (city.CityEngName !== "Diauyutai") {
+                let selectedDisctictCount = 0
+                city.AreaList.forEach(area => {
+                    let districtSelectedString = ''
+                    if (disctictArr.indexOf(area.AreaName) != -1) {
+                        districtSelectedString = 'custom-selected-option'
+                        selectedDisctictCount ++
+                    }
+
+                    // 寫入鄉鎮市區選項
+                    $('#district-options').append(
+                        `<div class="custom-option-muti-layer ${districtSelectedString} d-none" data-value="${area.AreaName}"
+                                     data-layer-index="2" data-parent-option="${city.CityEngName}">
+                                 ${area.AreaName}
+                            </div>`
+                    )
+                })
+
+                const selectedDistrictCountText = selectedDisctictCount === 0 ? '' : `(${selectedDisctictCount})`
+                // 寫入縣市選項
+                $('#city-options').append(
+                    `<div class="custom-option-muti-layer" data-option-id="${city.CityEngName}" data-option-text="${city.CityName}"
+                         data-layer-index="1" data-selected-child-option-num="0">
+                            ${city.CityName}${selectedDistrictCountText}
+                    </div>`
+                )
+            }
+        })
+
+        $('.custom-select').each(function(index, item) {
+            const totalSelectedOption = $(item).find(`.custom-selected-option`)
+            const totalNumString = totalSelectedOption.length === 0 ? $(item).data('placeholder') : `已選${totalSelectedOption.length}`
+            $(item).find('.custom-select-value-text').text(`${totalNumString}`)
+        })
+
+        function getSelectedOptions(targetSelectId) {
+            const selectedDistrictOptions = $(`#${targetSelectId}`).find('.custom-selected-option')
+            let selectedDistrictData = ""
+
+            selectedDistrictOptions.each((index, item) => {
+                const connectionString = index === selectedDistrictOptions.length -1 ? "" : "+"
+                selectedDistrictData = selectedDistrictData + $(item).data('value') + connectionString
+            })
+
+            return selectedDistrictData
+        }
+
+        //更新房租上限下限
+        $('#rent-upper-limit').val(notEmpty(urlParams.maxRent) ? urlParams.maxRent : "")
+        $('#rent-lower-limit').val(notEmpty(urlParams.minRent) ? urlParams.minRent : "")
+
+        function changeRentText() {
+            const upperLimit = $('#rent-upper-limit').val()
+            const lowerLimit = $('#rent-lower-limit').val()
+            const $currentCustomSelect = $('#rent-custom-select')
+            let rentLimitString = $currentCustomSelect.data('placeholder')
+            if (upperLimit !== "" && lowerLimit !== "") {
+                rentLimitString = `${lowerLimit}~${upperLimit}元`
+            } else if (upperLimit === "" && lowerLimit !== "") {
+                rentLimitString = `${lowerLimit}元以上`
+            } else if (lowerLimit === "" && upperLimit !== "") {
+                rentLimitString = `${upperLimit}元以下`
+            }
+
+            $currentCustomSelect.find('.custom-select-value-text').text(rentLimitString)
+        }
+        changeRentText()
+
+        $('#search-button').on('click', function() {
+            const selectedDistrictData = getSelectedOptions('district-options')
+            const selectedFeatureData = getSelectedOptions('feature-options')
+
+            const searchUrl = new URL(window.location.origin + '/House/Search')
+            searchUrl.searchParams.append('Page', 1)
+            searchUrl.searchParams.append('Disctict', selectedDistrictData)
+            searchUrl.searchParams.append('MaxRent', $('#rent-upper-limit').val())
+            searchUrl.searchParams.append('MinRent', $('#rent-lower-limit').val())
+            searchUrl.searchParams.append('Feature', selectedFeatureData)
+
+            window.location = searchUrl
+        })
+    })
+</script>
+

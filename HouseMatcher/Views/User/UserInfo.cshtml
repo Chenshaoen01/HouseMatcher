@@ -1,0 +1,186 @@
+﻿@model HouseMatcher.Models.UserData
+<div class="d-flex justify-content-center h-100 py-5">
+    <div class="main-content fw-bold">
+        <p>基本資料編輯</p>
+        <div class="d-flex justify-content-end">
+            <button id="create-button" class="custom-button mb-4" data-bs-toggle="modal" data-bs-target="#user-info-modal">新增</button>
+        </div>
+        <div class="d-flex flex-column align-items-center">
+            @{
+                string UserImgUrl = "/" + Model.UserImgId;
+            }
+            <div class="bg-secondary user-img-rectangle" style="background-image:url('@UserImgUrl')"></div>
+            <p class="mt-3">@Model.UserName</p>
+        </div>
+        <div class="mt-5">
+            <p class="fs-5 text-strat">聯絡資料</p>
+            <div class="devider border-dark my-3"></div>
+            <p>連絡電話：@Model.UserPhoneNumber</p>
+            <p>電子信箱：@Model.UserEmail</p>
+            <p>聯絡地址：@Model.UserLocation</p>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="user-info-modal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="w-100 d-flex justify-content-center">
+                    <img src="/matcher-logo-square.png" class="logo-img-sm mb-1 mx-auto" />
+                </div>
+                <p class="fs-5 fw-bold text-center mb-3">編輯使用者資訊</p>
+                <div class="devider-light"></div>
+                <div class="mt-3 mb-2 w-100">
+                    <p class="text-start mb-2 fw-bold">使用者照片：</p>
+                    @{
+                        bool isImgExist = Model.UserImgId != null && Model.UserImgId != "";
+
+                        string inputDisplay = isImgExist ? "d-none" : "d-block";
+                        string imgAndDeleteButtonDisplay = isImgExist ? "d-block" : "d-none";
+                    }
+                    <div class="d-flex justify-content-start align-items-start">
+                        <img id="form-img" src="@UserImgUrl" class="w-50 form-img @imgAndDeleteButtonDisplay"
+                             data-origin-img-url="@Model.UserImgId" />
+                        <button id="delete-img-button" type="button" class="ms-3 custom-button custom-button-red @imgAndDeleteButtonDisplay">刪除</button>
+                    </div>
+                    <label for="image-input" class="form-label">
+                        <input id="image-input" class="form-control @inputDisplay" type="file">
+                    </label>
+                </div>
+                <div class="mb-3 w-100 d-flex flex-column flex-md-row">
+                    @* 使用者姓名 *@
+                    <div class="w-100 w-md-50 pe-0 pe-md-2">
+                        <p class="text-start mb-2 fw-bold">使用者姓名：</p>
+                        <label class="w-100">
+                            <input id="user-name-input" type="text" class="w-100 form-input"
+                                   value="@Model.UserName" />
+                        </label>
+                    </div>
+                    @* 連絡電話 *@
+                    <div class="w-100 w-md-50 ps-0 ps-md-2">
+                        <p class="text-start mb-2 fw-bold">連絡電話：</p>
+                        <label class="w-100">
+                            <input id="user-phone-input" type="text" class="w-100 form-input"
+                                   value="@Model.UserPhoneNumber" />
+                        </label>
+                    </div>
+                </div>
+                <div class="mb-3 w-100 d-flex flex-column flex-md-row">
+                    @* 電子信箱 *@
+                    <div class="w-100 w-md-50 pe-0 pe-md-2">
+                        <p class="text-start mb-2 fw-bold">電子信箱：</p>
+                        <label class="w-100">
+                            <input id="user-email-input" type="text" class="w-100 form-input"
+                                   value="@Model.UserEmail" />
+                        </label>
+                    </div>
+                    @* 聯絡地址 *@
+                    <div class="w-100 w-md-50 ps-0 ps-md-2">
+                        <p class="text-start mb-2 fw-bold">聯絡地址：</p>
+                        <label class="w-100">
+                            <input id="user-address-input" type="text" class="w-100 form-input"
+                                   value="@Model.UserLocation" />
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer border-0">
+                <div class="w-100 d-flex justify-content-center">
+                    <button id="user-info-submit" class="custom-button">儲存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        const imageInput = document.getElementById('image-input')
+        const isOriginImgExist = $('#form-img').data('origin-img-url') !== null && $('#form-img').data('origin-img-url') !== ""
+        let imgState = isOriginImgExist ? 'origin' : 'empty'
+        // 加入圖片後顯示於畫面上
+        imageInput.addEventListener('change', function () {
+            imgState = 'new'
+            if ($('#image-input')[0].files && $('#image-input')[0].files[0]) {
+                const reader = new FileReader
+                reader.onload = function (e) {
+                    $('#image-input').addClass('d-none')
+
+                    $('.form-img').removeClass('d-none')
+                    $('#delete-img-button').removeClass('d-none')
+
+                    $('.form-img').attr('src', e.target.result)
+                }
+                reader.readAsDataURL($('#image-input')[0].files[0])
+            }
+        })
+
+        // 移除圖片按鈕點擊事件
+        $(document).on('click', '#delete-img-button', function () {
+            imgState = 'empty'
+            $('#image-input').removeClass('d-none')
+
+            $('.form-img').addClass('d-none')
+            $('#delete-img-button').addClass('d-none')
+
+            imageInput.value = ''
+        })
+
+        // 上傳圖片
+        function imgUpload() {
+            return new Promise((resolve, reject) => {
+                if ($('#image-input')[0].files && $('#image-input')[0].files[0]) {
+                    const formData = new FormData();
+                    formData.append('file', $('#image-input')[0].files[0]);
+                    $.ajax({
+                        url: '@Url.Action("Post", "FileUpload")',
+                        method: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function (res) { resolve(res) },
+                    });
+                } else {
+                    resolve("")
+                }
+
+            })
+        }
+
+        // 送出模式按鈕點擊事件
+        $(document).on('click', '#user-info-submit', async function () {
+            const submitData = {
+                UserName: $('#user-name-input').val(),
+                UserEmail: $('#user-email-input').val(),
+                UserLocation: $('#user-address-input').val(),
+                UserDescription: "",
+                UserPhoneNumber: $('#user-phone-input').val(),
+                UserImgId: "",
+            }
+
+            if (imgState === 'origin') {
+                submitData.UserImgId = $('#form-img').data('origin-img-url')
+            }
+            else if (imgState === 'new') {
+                await imgUpload().then((res) => {
+                    submitData.UserImgId = res.id + res.fileType
+                })
+            }
+
+            $.ajax({
+                url: '@Url.Action("UserPut", "User")',
+                method: 'put',
+                data: JSON.stringify(submitData),
+                contentType: 'application/json',
+                success: function (res) { console.log(res) },
+                error: function (err) { console.log(err) },
+            });
+        })
+    })
+</script>
+
+

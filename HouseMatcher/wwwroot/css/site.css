@@ -1,0 +1,670 @@
+
+html {
+    background-color: #D8E5FF;
+}
+
+body{
+    background-color: transparent;
+}
+
+.body-area {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+footer {
+    background-color: white;
+}
+
+.main-content {
+    width: 100%;
+    padding: 0 50px;
+    max-width: 800px;
+}
+
+.main-content-sm {
+    width: 100%;
+    padding: 0 50px;
+    max-width: 450px;
+}
+
+.white-card {
+    padding: 2rem;
+    background-color: white;
+    border-radius: 25px;
+    box-shadow: 0 0 10px #aaaaaa;
+}
+
+.bg-blue {
+    background-color: #B8D0FF;
+}
+
+.bg-blue-middle {
+    background-color: #ACC8FF;
+}
+
+.logo-img-sm {
+    width: 10%;
+    max-width: 35px;
+}
+
+.logo-img {
+    width: 15%;
+    max-width: 50px;
+}
+
+.logo-img-lg {
+    width: 100px;
+}
+
+.logo-img-rectangle {
+    width: 100px;
+}
+
+.user-nav-bar-image {
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    margin-right: 10px;
+    background-color: #DDDDDD;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+.user-link-box {
+    border: none;
+    border-radius: 5px;
+    background-color: white;
+    width: 150px;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    bottom: -1px;
+    right: 1px;
+    transform: translateY(100%);
+}
+
+@media (max-width: 767.98px) {
+    .user-link-box {
+        background-color: #B8D0FF;
+        width: 100%;
+        bottom: 0px;
+    }
+}
+
+.user-link-box-item {
+    color: black;
+    display: block;
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    border: none;
+    font-weight: bold;
+}
+
+.nav-link {
+    font-weight: bold;
+}
+
+.custom-button {
+    border: none;
+    background-color: #3e8ede;
+    box-shadow: 0 0 1px grey;
+    color: white;
+    text-decoration: none;
+    border-radius: 50rem;
+    padding: 5px 15px;
+}
+.custom-button:hover {
+    color: white;
+}
+
+.custom-button-red {
+    background-color: red;
+}
+/*首頁*/
+.homepage-header {
+    background-image: url('/house1.jpg');
+    background-size: cover;
+    background-position: center
+}
+
+.homepage-header-content {
+    padding: 3rem 3rem 2.5rem 3rem;
+    width: 100%;
+    max-width: 800px;
+    border-radius: 50px;
+    background-color: rgb(255, 255, 255, 0.85);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.homepage-intro-img-box {
+    width: 100%;
+    height: 100%;
+    min-height: 250px;
+    border-radius: 25px;
+
+    background-image: url('/house1.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+.homepage-intro-line {
+    width: 2px;
+    height: 150px;
+    margin-bottom: 1rem;
+    background-color: skyblue;
+    position: relative;
+    overflow: hidden;
+}
+
+.homepage-intro-line-first::before, .homepage-intro-line-second::before {
+    content: '';
+    position: absolute;
+    width: 3px;
+    height: 150px;
+    background-color: blue;
+    animation: introline-scroll infinite linear;
+    animation-duration: 2.5s;
+    transform: translateY(-100%);
+}
+
+.homepage-intro-line-second::before {
+    animation-delay: 0.5s;
+}
+
+@keyframes introline-scroll {
+    0% {
+       transform: translateY(-100%);
+   }
+   
+   100% {
+       transform: translateY(100%);
+   }
+}
+
+.homepage-introduce-circle {
+    width: 100%;
+    max-width: 250px;
+    background-color: blue;
+    aspect-ratio: 1/1;
+    border-radius: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/*數字滾動*/
+.post-amout {
+    margin: 0.1em 0;
+    position: relative;
+    display: flex;
+    align-items: center;
+    color: white;
+    font-weight: bold;
+}
+
+.post-amout + span {
+    display: block;
+    width: 100%;
+    text-align: right;
+}
+
+.scroll-num {
+    position: relative;
+    display: flex;
+    margin-right: 0.2em;
+    width: 0;
+    overflow: hidden;
+    height: 48px;
+    transition: width 1.8s ease;
+}
+
+.scroll-num > span {
+    display: flex;
+    text-align: center;
+    flex-direction: column;
+    opacity: 0;
+    flex-shrink: 2;
+    flex-basis: 48px;
+    width: 1px;
+    position: absolute;
+    right: 0;
+    line-height: 48px;
+    transition: all 2s ease;
+}
+
+.scroll-num > span.visible {
+    position: static;
+    width: 30px;
+    opacity: 1;
+    flex-shrink: 1;
+}
+
+
+/*輪播*/
+.owl-nav {
+    display: none;
+}
+
+.homepage-carousel {
+    position: relative;
+    padding: 0 80px;
+}
+
+.homepage-carousel-button {
+    width: 25px;
+    padding: 0;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+
+    background-color: transparent;
+    border: solid black 1px;
+    border-radius: 50%;
+}
+
+.homepage-carousel-button-pre {
+    left: 30px;
+}
+
+.homepage-carousel-button-next {
+    right: 30px;
+}
+
+.homepage-carousel-content-item {
+    height: 300px;
+    width: 100%;
+    margin-bottom:50px;
+    position: relative;
+    border-radius: 15px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.homepage-carousel-content-info {
+    width: 75%;
+    padding: 1rem;
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%) translateY(25%);
+    border-radius: 10px;
+    background-color: #ffefef;
+}
+
+.homepage-carousel-content-title {
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 16px;
+    margin-bottom: 0.75rem;
+}
+
+.homepage-carousel-content-text {
+    font-size: 14px;
+    line-height: 14px;
+    margin-bottom: 0.5rem;
+}
+
+/*列表頁面卡片*/
+.list-card {
+    display: flex;
+    align-items: stretch;
+    overflow: hidden;
+    background-color: white;
+    border-radius: 30px;
+    box-shadow: 0 0 10px #aaaaaa;
+    color: black;
+}
+
+.list-card-link {
+    text-decoration: none;
+}
+
+.list-card-img {
+    width: 35%;
+    max-width: 200px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.list-card-content {
+    padding: 1rem;
+}
+
+.list-card-content-title {
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 14px;
+
+    margin-bottom: 0.75rem;
+}
+
+.list-card-content-text {
+    font-size: 10px;
+    line-height: 10px;
+
+    margin-bottom: 0.5rem;
+}
+
+.feature-label {
+    background-color: #E9E8E8;
+    border-radius: 7px;
+    padding: 0.25rem 0.5rem;
+    margin-right: 0.5rem;
+    font-size: 10px;
+}
+
+.devider {
+    width: 100%;
+    border:0.1px solid #aaaaaa;
+}
+
+.devider-light {
+    width: 100%;
+    border: 0.1px solid #dddddd;
+}
+
+/*使用者頁面*/
+.user-img-rectangle {
+    width: 150px;
+    height: 200px;
+    border-radius: 15px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/*房屋詳細資訊*/
+.house-description-content img{
+    max-width: 100%;
+    height: auto;
+}
+/*訊息頁面*/
+.message-content-area {
+    height: 50vh;
+}
+
+.message-sent {
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  margin: 1rem;
+}
+
+.message-received {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    margin: 1rem;
+}
+
+.message-sent-text {
+    padding: 0.5rem;
+    background-color: #B8D0FF;
+    border-radius: 0.5rem;
+}
+
+.message-received-text {
+    padding: 0.5rem;
+    background-color: #B8D0FF;
+    border-radius: 0.5rem;
+}
+
+.message-time-text {
+   margin: 5px 0;
+   font-size: 0.75rem;
+}
+
+/*覆蓋 bootstrap form 樣式*/
+.form-input, .form-select {
+    height: 2.25rem;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 0 1px grey;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.form-input-sm {
+    height: 1.5rem;
+}
+
+.form-input-noborder {
+    height: 2.25rem;
+    border: none;
+    border-radius: 5px;
+    background-color: white;
+    font-weight: bold;
+    box-shadow: none;
+}
+
+.custom-input {
+    height: 2.25rem;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 0 1px grey;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.address-box {
+    border: solid #DDDDDD 1px;
+    padding: 1.5rem;
+    border-radius: 15px;
+}
+
+/*覆蓋 bootstrap modal 樣式*/
+.modal-content {
+    border-radius: 20px;
+    overflow: hidden;
+    background-clip: unset;
+}
+
+.modal-header {
+    border-radius: 20px 20px 0 0;
+    text-align: center;
+}
+
+.modal-footer {
+    padding-top: 0;
+    border: none;
+    border-radius: 0 0 20px 20px;
+    overflow: hidden;
+}
+
+/*客製化select*/
+.custom-select {
+    position: relative;
+}
+
+.custom-select-value-high {
+    height: 2.25rem;
+}
+
+.custom-select-value {
+    width: 100%;
+    padding: 0 0.5rem;
+    border-radius: 5px;
+    background-color: white;
+    box-shadow: 0 0 1px grey;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    z-index: 1000;
+}
+
+.custom-select-value-text {
+    font-size: 14px;
+    font-weight: bold;
+    padding: 2px;
+}
+
+.custom-options {
+    width: 100%;
+    border-radius: 5px;
+    background-color: white;
+    box-shadow: 0 0 1px grey;
+    overflow: hidden;
+
+    position: absolute;
+    bottom: 0;
+    transform: translateY(100%);
+    z-index: 1030;
+}
+
+.custom-option {
+    padding: 0.25rem 0.5rem;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.custom-select.expanded .custom-select-arrow {
+    transform: rotate(180deg);
+}
+
+.custom-selected-option {
+    background-color: black;
+    color: white;
+}
+
+/*多層選項*/
+.custom-options-muti-layer {
+    width: 100%;
+    display: none;
+    position: absolute;
+    bottom: 0;
+    transform: translateY(100%);
+    display: flex;
+    align-items: start;
+    z-index: 1060;
+}
+
+.custom-options-child-layer {
+    width: 50%;
+    max-height: 30vh;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 5px;
+    background-color: white;
+    box-shadow: 0 0 1px grey;
+}
+
+.custom-option-muti-layer {
+    padding: 0 0.5rem;
+    cursor: pointer;
+}
+
+/* width */
+.custom-options-child-layer::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+    background-color: white;
+}
+
+/* Track */
+.custom-options-child-layer::-webkit-scrollbar-track {
+    background-color: white;
+    box-shadow: inset 0 0 5px skyblue;
+    border-radius: 10px;
+}
+
+/* Handle */
+.custom-options-child-layer::-webkit-scrollbar-thumb {
+    background: skyblue;
+    border-radius: 10px;
+}
+
+/*地圖*/
+.search-map {
+    border-radius: 5%;
+    box-shadow: 0 0 1px grey;
+    width: 100%;
+    max-width: 600px;
+    aspect-ratio: 1.5/1;
+}
+
+.map-box {
+    width:100%;
+    height: 250px;
+}
+
+.map-infowindow-box {
+    width: 250px;
+    padding: 0.75rem 1.5rem;
+}
+
+.map-infowindow-box-title {
+    font-size: 1rem;
+    color: black;
+    font-weight: bold;
+    margin-bottom: 0.25rem;
+}
+
+.map-infowindow-box-text {
+    font-size: 0.75rem;
+    color: black;
+    margin-bottom: 0.25rem;
+}
+
+/*房屋卡片列表頁籤*/
+.data-list-page-label {
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    margin: 0 5px;
+    text-align: center;
+    border-radius: 50%;
+}
+
+    .data-list-page-label.selected {
+        background: #3e8ede;
+    }
+
+/*scroll-bar 樣式*/
+/* width */
+::-webkit-scrollbar {
+    width: 15px;
+    height: 15px;
+    background-color: white;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background-color: white;
+    box-shadow: inset 0 0 5px skyblue;
+    border-radius: 10px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: skyblue; 
+    border-radius: 10px;
+}
+
+
+/*通用類別*/
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.fs-7 {
+    font-size: 14px;
+}

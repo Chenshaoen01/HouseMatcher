@@ -1,0 +1,74 @@
+﻿<div class="d-flex justify-content-center h-100">
+    <div class="main-content py-5">
+        <div class="list-card-link message-card d-block cursor-pointer" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            <div class="list-card">
+                <div class="px-4 py-3 w-100">
+                    <p class="fs-5 fw-bold mb-2">屋主：陳先生</p>
+                    <p class="fs-6 fw-bold mb-2">文化路套房</p>
+                    <div class="devider my-3"></div>
+                    <p class="fs-6 fw-bold mb-2">林先生：您好我想預約看屋</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header p-3 align-items-start">
+                <div class="d-flex flex-column">
+                    <p class="fs-5 fw-bold mb-1">屋主：陳先生</p>
+                    <p class="fs-6 fw-bold mb-1">文化路套房</p>
+                </div>
+                <button type="button" class="btn-close mt-2" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="message-content-area">
+                    <div class="message-sent">
+                        <span>陳先生</span>
+                        <div class="message-sent-text">您好明天下午一點方便嗎</div>
+                        <div class="message-time-text">2024/4/11 11:43</div>
+                    </div>
+                    <div class="message-received">
+                        <span>陳先生</span>
+                        <div class="message-received-text">您好明天下午一點方便嗎</div>
+                        <div class="message-time-text">2024/4/11 11:43</div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="d-flex flex-column align-items-end w-100">
+                    <input type="text" class="w-100 mb-3"/>
+                    <button class="btn bg-blue border border-dark fw-bold">送出</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@* <div class="container">
+    <div class="row p-1">
+        <div class="col-2"><span class="text-nowrap">要發訊息給誰</span></div>
+        <div class="col-5"><input type="text" id="userInput" /></div>
+    </div>
+    <div class="row p-1">
+        <div class="col-2"><span class="text-nowrap">要說甚麼</span></div>
+        <div class="col-5"><input type="text" class="w-100" id="messageInput" /></div>
+    </div>
+    <div class="row p-1">
+        <div class="col-6 text-end">
+            <input type="button" id="sendButton" value="送出" />
+        </div>
+    </div>
+    <div class="row p-1">
+        <div class="col-6">
+            <hr />
+        </div>
+    </div>
+    <div class="row p-1">
+        <div class="col-6">
+            <ul id="messagesList"></ul>
+        </div>
+    </div>
+</div> *@
+<script src="~/js/signalr/dist/browser/signalr.js"></script>
+<script src="~/js/chat.js"></script>
