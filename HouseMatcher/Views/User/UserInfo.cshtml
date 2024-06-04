@@ -3,7 +3,7 @@
     <div class="main-content fw-bold">
         <p>基本資料編輯</p>
         <div class="d-flex justify-content-end">
-            <button id="create-button" class="custom-button mb-4" data-bs-toggle="modal" data-bs-target="#user-info-modal">新增</button>
+            <button id="create-button" class="custom-button mb-4" data-bs-toggle="modal" data-bs-target="#user-info-modal">編輯</button>
         </div>
         <div class="d-flex flex-column align-items-center">
             @{
@@ -51,9 +51,9 @@
                         <input id="image-input" class="form-control @inputDisplay" type="file">
                     </label>
                 </div>
-                <div class="mb-3 w-100 d-flex flex-column flex-md-row">
+                <div class="mb-2 w-100 d-flex flex-column flex-lg-row">
                     @* 使用者姓名 *@
-                    <div class="w-100 w-md-50 pe-0 pe-md-2">
+                    <div class="w-100 w-lg-50 pe-0 pe-lg-2 mb-2 mb-lg-0">
                         <p class="text-start mb-2 fw-bold">使用者姓名：</p>
                         <label class="w-100">
                             <input id="user-name-input" type="text" class="w-100 form-input"
@@ -61,7 +61,7 @@
                         </label>
                     </div>
                     @* 連絡電話 *@
-                    <div class="w-100 w-md-50 ps-0 ps-md-2">
+                    <div class="w-100 w-lg-50 ps-0 ps-lg-2 mb-2 mb-lg-0">
                         <p class="text-start mb-2 fw-bold">連絡電話：</p>
                         <label class="w-100">
                             <input id="user-phone-input" type="text" class="w-100 form-input"
@@ -69,9 +69,9 @@
                         </label>
                     </div>
                 </div>
-                <div class="mb-3 w-100 d-flex flex-column flex-md-row">
+                <div class="mb-2 w-100 d-flex flex-column flex-lg-row">
                     @* 電子信箱 *@
-                    <div class="w-100 w-md-50 pe-0 pe-md-2">
+                    <div class="w-100 w-lg-50 pe-0 pe-lg-2 mb-2 mb-lg-0">
                         <p class="text-start mb-2 fw-bold">電子信箱：</p>
                         <label class="w-100">
                             <input id="user-email-input" type="text" class="w-100 form-input"
@@ -79,7 +79,7 @@
                         </label>
                     </div>
                     @* 聯絡地址 *@
-                    <div class="w-100 w-md-50 ps-0 ps-md-2">
+                    <div class="w-100 w-lg-50 ps-0 ps-lg-2 mb-2 mb-lg-0">
                         <p class="text-start mb-2 fw-bold">聯絡地址：</p>
                         <label class="w-100">
                             <input id="user-address-input" type="text" class="w-100 form-input"
@@ -171,13 +171,20 @@
                 })
             }
 
+            showLoading()
             $.ajax({
                 url: '@Url.Action("UserPut", "User")',
                 method: 'put',
                 data: JSON.stringify(submitData),
                 contentType: 'application/json',
-                success: function (res) { console.log(res) },
-                error: function (err) { console.log(err) },
+                success: function (res) {
+                    saveMessageAndRefresh(res)
+                    hideLoading()
+                },
+                error: function (err) {
+                    showHint(err.responseText)
+                    hideLoading()
+                },
             });
         })
     })

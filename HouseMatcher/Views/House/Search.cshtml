@@ -29,34 +29,50 @@
                     </div>
                 </a>
             }
-        }
-        <div class="d-flex justify-content-center mb-4">
-            @{
-                if (ViewBag.CurrentPage != 1)
-                {
-                    int targetPage = ViewBag.CurrentPage - 1;
-                    <span class="data-list-page-label" data-target-page="@targetPage">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
-                            <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
+            if (Model.HouseList.Count() == 0)
+            {
+                <div class="mb-5">
+                    <p class="text-center mb-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" fill="currentColor" class="bi bi-house-x-fill" viewBox="0 0 16 16">
+                            <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L8 2.207l6.646 6.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293z" />
+                            <path d="m8 3.293 4.712 4.712A4.5 4.5 0 0 0 8.758 15H3.5A1.5 1.5 0 0 1 2 13.5V9.293z" />
+                            <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m-.646-4.854.646.647.646-.646a.5.5 0 0 1 .708.707l-.647.646.647.646a.5.5 0 0 1-.708.708l-.646-.647-.646.647a.5.5 0 0 1-.708-.707l.647-.647-.647-.646a.5.5 0 0 1 .708-.707Z" />
                         </svg>
-                    </span>
-                }
-                for (int i = 1; i <= ViewBag.LastPage; i++)
-                {
-                    string selectedString = ViewBag.CurrentPage == i ? "selected" : "";
-                    <span class="data-list-page-label @selectedString" data-target-page="@i">@i</span>
-                }
-                if (ViewBag.CurrentPage != ViewBag.LastPage)
-                {
-                    int targetPage = ViewBag.CurrentPage + 1;
-                    <span class="data-list-page-label" data-target-page="@targetPage">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
-                            <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708" />
-                        </svg>
-                    </span>
-                }
+                    </p>
+                    <h5 class="text-center fw-bold my-5">查無符合搜尋條件的房屋資訊</h5>
+                </div>
+            } else
+            {
+                <div class="d-flex justify-content-center mb-4">
+                    @{
+                        if (ViewBag.CurrentPage != 1)
+                        {
+                            int targetPage = ViewBag.CurrentPage - 1;
+                            <span class="data-list-page-label" data-target-page="@targetPage">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
+                                </svg>
+                            </span>
+                        }
+                        int startPage = ViewBag.CurrentPage > 5 ? ViewBag.LastPage - 4 : 1;
+                        for (int i = startPage; i <= ViewBag.LastPage && i - startPage < 5; i++)
+                        {
+                            string selectedString = ViewBag.CurrentPage == i ? "selected" : "";
+                            <span class="data-list-page-label @selectedString" data-target-page="@i">@i</span>
+                        }
+                        if (ViewBag.CurrentPage != ViewBag.LastPage)
+                        {
+                            int targetPage = ViewBag.CurrentPage + 1;
+                            <span class="data-list-page-label" data-target-page="@targetPage">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708" />
+                                </svg>
+                            </span>
+                        }
+                    }
+                </div>
             }
-        </div>
+        }
     </div>
 </div>
 

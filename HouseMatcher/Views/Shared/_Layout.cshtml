@@ -9,6 +9,7 @@
         <link rel="stylesheet" href="~/lib/OwlCarousel2/assets/owl.carousel.css" />
         <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
         <link rel="stylesheet" href="~/HouseMatcher.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
     </head>
     <body>
         <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -16,70 +17,70 @@
         <script src="~/lib/OwlCarousel2/owl.carousel.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
         <script src="~/js/search.js"></script>
-        
+
+        <div id="loading-page" class="loading-page">
+            <div class="spinner-border" role="status"></div>
+        </div>
         <div class="body-area">
-            <div>
-                <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white">
-                    <div class="container-fluid">
-                        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
-                            <img src="/matcher-logo-rectangle.png" class="logo-img-rectangle mb-3" />
-                        </a>
-                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                                aria-expanded="false" aria-label="Toggle navigation">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
-                        <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                            <ul class="navbar-nav flex-grow-1">
-                                <li class="nav-item">
+            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light w-100 position-fixed">
+                <div class="container-fluid">
+                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                        <img src="/matcher-logo-rectangle.png" class="logo-img-rectangle mb-3" />
+                    </a>
+                    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5" />
+                        </svg>
+                    </button>
+                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                        <ul class="navbar-nav flex-grow-1">
+                            <li class="nav-item">
                                 <a class="nav-link text-dark" href="@Url.Action("Search", "House", new { Page = 1 })">找好房</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="House" asp-action="SearchMap">地圖尋屋</a>
-                                </li>
-                                <li class="nav-item ms-0 ms-sm-auto pt-2">
-                                    <div class="d-flex align-items-center">
-                                        @{
-                                            if (User.Identity.IsAuthenticated)
-                                            {
-                                                string UserId = @User.FindFirst(type => type.Type == "UserId").Value;
-                                                string UserImg = @User.FindFirst(type => type.Type == "UserImg").Value;
-                                                string UserImgUrl = '/' + UserImg;
-                                                <div class="cursor-pointer d-flex align-items-center w-100" data-bs-toggle="collapse" data-bs-target="#user-link-box">
-                                                    <span class="user-nav-bar-image" style="background-image: url('@UserImgUrl')"></span>
-                                                    <span class="me-3 fw-bold" data-user-id="@UserId">@User.Identity.Name</span>
-                                                </div>
-                                                <div class="user-link-box collapse" id="user-link-box">
-                                                    <a class="user-link-box-item text-dark" asp-controller="User" asp-action="UserInfo">個人資訊</a>
-                                                    <a class="user-link-box-item text-dark" asp-controller="Message" asp-action="Index">訊息</a>
-                                                    <a class="user-link-box-item text-dark" asp-controller="House" asp-action="ManageList">房屋刊登管理</a>
-                                                    <span class="user-link-box-item cursor-pointer" id="log-out">登出</span>
-                                                </div>
-                                            }
-                                            else
-                                            {
-                                                <div class="d-flex align-items-center">
-                                                    <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="LoginPage">登入</a>
-                                                    <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="RegisterPage">註冊</a>
-                                                </div>
-                                            }
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="House" asp-action="SearchMap">地圖尋屋</a>
+                            </li>
+                            <li class="nav-item ms-0 ms-sm-auto pt-2">
+                                <div class="d-flex align-items-center">
+                                    @{
+                                        if (User.Identity.IsAuthenticated)
+                                        {
+                                            string UserId = @User.FindFirst(type => type.Type == "UserId").Value;
+                                            string UserImg = @User.FindFirst(type => type.Type == "UserImg").Value;
+                                            string UserImgUrl = '/' + UserImg;
+                                            <div class="cursor-pointer d-flex align-items-center w-100" data-bs-toggle="collapse" data-bs-target="#user-link-box">
+                                                <span class="user-nav-bar-image" style="background-image: url('@UserImgUrl')"></span>
+                                                <span class="me-3 fw-bold" data-user-id="@UserId">@User.Identity.Name</span>
+                                            </div>
+                                            <div class="user-link-box collapse" id="user-link-box">
+                                                <a class="user-link-box-item text-dark" asp-controller="User" asp-action="UserInfo">個人資訊</a>
+                                                <a class="user-link-box-item text-dark" asp-controller="Message" asp-action="Index">訊息</a>
+                                                <a class="user-link-box-item text-dark" href="@Url.Action("ManageList", "House", new { Page = 1 })">房屋刊登管理</a>
+                                                <span class="user-link-box-item cursor-pointer" id="log-out">登出</span>
+                                            </div>
                                         }
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
+                                        else
+                                        {
+                                            <div class="d-flex flex-column flex-sm-row align-items-center">
+                                                <a class="nav-link text-dark py-0 mb-3" asp-area="" asp-controller="User" asp-action="LoginPage">登入</a>
+                                                <a class="nav-link text-dark py-0 mb-3" asp-area="" asp-controller="User" asp-action="RegisterPage">註冊</a>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                            </li>
+                        </ul>
                     </div>
-                </nav>
+                </div>
+            </nav>
+            <div style="padding-top: 4.8rem;">
                 @RenderBody()
             </div>
-            <div class="bg-white py-5">
+            <div class="bg-white py-2">
                 <div class="d-flex flex-column flex-md-row justify-content-center align-items-center">
-                    <img src="/matcher-logo-square.png" class="logo-img-lg my-4 mx-5" />
-                    <div class="d-flex flex-column border-dark border-top border-bottom">
-                        <p class="fw-bold text-black pt-3">Facebook：HouseMather</p>
-                        <p class="fw-bold text-black">Instagram：HouseMather</p>
-                        <p class="fw-bold text-black">Line：HouseMather</p>
-                        <p class="fw-bold text-black">Email：HouseMather@@email.com</p>
-                    </div>
+                    <img src="/matcher-logo-square.png" class="logo-img-xs mx-2 my-1" />
+                    <span class="copy-right-text fw-bold text-black text-center">Copyright © 2024 HouseMather. All rights reserved.</span>
                 </div>
             </div>
         </div>
@@ -100,6 +101,10 @@
                 </div>
             </div>
         </div>
+        <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+        <script>
+            AOS.init();
+        </script>
         @await RenderSectionAsync("Scripts", required: false)
     
         <script>
@@ -119,7 +124,7 @@
         })
 
         function saveMessageAndRefresh(hintMessage) {
-            localStorage.setItem("hintMessage", "儲存成功")
+            localStorage.setItem("hintMessage", hintMessage)
             location.reload();
         }
 
@@ -134,6 +139,7 @@
                 showHint(hintMessage)
                 localStorage.setItem("hintMessage", "");
             }
+            hideLoading()
         }
         checkHasMessageAndShowHint()
 
@@ -146,6 +152,14 @@
             hintContent.innerHTML = hintMessage
 
             hintModal.show()
+        }
+
+        function showLoading() {
+            $('#loading-page').removeClass('d-none')
+        }
+
+        function hideLoading() {
+            $('#loading-page').addClass('d-none')
         }
         </script>
     </body>

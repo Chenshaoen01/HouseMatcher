@@ -22,16 +22,23 @@ namespace HouseMatcher.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(IFormFile file)
         {
-            Guid NewGuid = Guid.NewGuid();
-            string FileExtention = System.IO.Path.GetExtension(file.FileName);
-            string filePath = _env.ContentRootPath + @"\wwwroot\" + NewGuid.ToString() + FileExtention;
-
-            using (var stream = System.IO.File.Create(filePath))
+            try
             {
-                await file.CopyToAsync(stream);
-            }
+                Guid NewGuid = Guid.NewGuid();
+                string FileExtention = System.IO.Path.GetExtension(file.FileName);
+                string filePath = _env.ContentRootPath + @"\wwwroot\" + NewGuid.ToString() + FileExtention;
 
-            return Ok(new { id = NewGuid.ToString(), fileType = FileExtention });
+                using (var stream = System.IO.File.Create(filePath))
+                {
+                    await file.CopyToAsync(stream);
+                }
+
+                return Ok(new { id = NewGuid.ToString(), fileType = FileExtention });
+            }
+            catch
+            {
+                return BadRequest("圖片上傳失敗");
+            }
         }
 
         [HttpPost("CKEditorImgUpload")]

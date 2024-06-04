@@ -11,29 +11,35 @@
                 {
                     string HouseImgUrl = "/"+ @house.HouseImg;
                     string HouseAddress = house.City + house.District + house.Road + house.Location;
-                    <a href="@Url.Action("Detail", "House", new { Id = house.HouseId})" class="list-card-link d-block mb-3">
-                        <div class="list-card">
-                            <div class="list-card-img" style="background-image: url('@HouseImgUrl')"></div>
-                            <div class="list-card-content">
-                                <p class="list-card-content-title">@house.HouseName</p>
-                                <p class="list-card-content-text">NT$ @house.RentPerMonth/月</p>
-                                <p class="list-card-content-text">地點：@HouseAddress</p>
-                                <p class="list-card-content-text">坪數：@house.HouseSize 坪</p>
-                                <div class="d-flex">
-                                    @{
+                        <a href="@Url.Action("Detail", "House", new { Id = house.HouseId})" class="list-card-link d-block mb-3">
+                            <div class="list-card">
+                                <div class="list-card-img" style="background-image: url('@HouseImgUrl')"></div>
+                                <div class="list-card-content">
+                                    <p class="list-card-content-title">@house.HouseName</p>
+                                    <p class="list-card-content-text">NT$ @house.RentPerMonth/月</p>
+                                    <p class="list-card-content-text">地點：@HouseAddress</p>
+                                    <p class="list-card-content-text">坪數：@house.HouseSize 坪</p>
+                                    <div class="d-flex">
+                                        @{
                                         foreach (var feature in house.FeaturLabelList)
                                         {
-                                            <span class="feature-label">@feature.LabelName</span>
+                                                    <span class="feature-label">@feature.LabelName</span>
                                         }
-                                    }
+                                        }
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </a>
+                        </a>
                 }
                 if(Model.HouseList.Count() == 0)
                 {
-                    <h5 class="text-center fw-bold mt-5">您尚未刊登租屋資訊</h5>
+                        <p class="text-center mb-0 mt-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" fill="currentColor" class="bi bi-clipboard-x-fill" viewBox="0 0 16 16">
+                                <path d="M6.5 0A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0zm3 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5z" />
+                                <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1A2.5 2.5 0 0 1 9.5 5h-3A2.5 2.5 0 0 1 4 2.5zm4 7.793 1.146-1.147a.5.5 0 1 1 .708.708L8.707 10l1.147 1.146a.5.5 0 0 1-.708.708L8 10.707l-1.146 1.147a.5.5 0 0 1-.708-.708L7.293 10 6.146 8.854a.5.5 0 1 1 .708-.708z" />
+                            </svg>
+                        </p>
+                        <h5 class="text-center fw-bold mt-5">您尚未刊登租屋資訊</h5>
                 }
             }
         </div>
@@ -44,13 +50,16 @@
                     if (ViewBag.CurrentPage != 1)
                     {
                         int targetPage = ViewBag.CurrentPage - 1;
-                        <span class="data-list-page-label" data-target-page="@targetPage">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
-                            </svg>
+                            <span class="data-list-page-label" data-target-page="@targetPage">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
+                                </svg>
                         </span>
                     }
-                    for (int i = 1; i <= ViewBag.LastPage; i++)
+
+                    int startPage = ViewBag.CurrentPage > 5 ? ViewBag.LastPage-4 : 1;
+
+                    for (int i = startPage; i <= ViewBag.LastPage && i - startPage < 5; i++)
                     {
                         string selectedString = ViewBag.CurrentPage == i ? "selected" : "";
                         <span class="data-list-page-label @selectedString" data-target-page="@i">@i</span>
@@ -58,11 +67,11 @@
                     if (ViewBag.CurrentPage != ViewBag.LastPage)
                     {
                         int targetPage = ViewBag.CurrentPage + 1;
-                        <span class="data-list-page-label" data-target-page="@targetPage">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708" />
-                            </svg>
-                        </span>
+                            <span class="data-list-page-label" data-target-page="@targetPage">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708" />
+                                </svg>
+                            </span>
                     }
                 }
             }
@@ -72,6 +81,12 @@
 @Html.Partial("Form")
 
 <script>
+    console.log(localStorage.getItem('need-refresh'))
+    if(localStorage.getItem('need-refresh')) {
+        location.reload()
+        localStorage.removeItem('need-refresh')
+    }
+
     $(document).on('click', '.data-list-page-label', function () {
         const targetPage = $(this).data('target-page')
 

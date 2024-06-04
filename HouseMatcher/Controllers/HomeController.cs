@@ -19,6 +19,7 @@ namespace HouseMatcher.Controllers
             _HouseMatcherContext = houseMatcherContext;
         }
 
+        [AllowAnonymous]
         public IActionResult Index()
         {
             HouseListViewModel viewModel = new HouseListViewModel();
@@ -28,6 +29,7 @@ namespace HouseMatcher.Controllers
                     {
                         HouseId = HouseData.HouseId,
                         HouseName = HouseData.HouseName,
+                        HouseImg = HouseData.HouseImg,
                         Description = HouseData.Description,
                         Location = HouseData.Location,
                         HouseSize = HouseData.HouseSize,
@@ -50,9 +52,9 @@ namespace HouseMatcher.Controllers
             return View(viewModel);
         }
 
-        public IActionResult Privacy()
+        [AllowAnonymous]
+        public IActionResult Redirect()
         {
-            string UserId = _httpContextAccessor.HttpContext.User.FindFirst(data => data.Type == "UserId").Value;
             return View();
         }
 

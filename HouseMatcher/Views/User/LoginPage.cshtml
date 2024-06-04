@@ -36,17 +36,24 @@
             if (validateBeforeSubmit(validateDataList)) {
                 const emailValue = $('#email-input').val();
                 const passwordValue = $('#password-input').val();
+
+                showLoading()
                 $.ajax({
                     url: window.location.origin + "/User/Login",
                     method: "POST",
                     data: JSON.stringify({ UserEmail: emailValue, UserPassword: passwordValue }),
                     contentType: 'application/json',
                     success: function (res) {
-                        window.location = window.location.origin
+                        const currentUrlItem = new URL(window.location)
+                        const returnTargetId = currentUrlItem.searchParams.get('returnId')
+                        const targetUrl = returnTargetId === null ? window.location.origin : window.location.origin + '/House/Detail/' + returnTargetId
+                        window.location = targetUrl
+
+                        hideLoading()
                     },
                     error: function (err) {
-                        console.log(err)
                         showHint(err.responseText)
+                        hideLoading()
                     },
                 });
             }

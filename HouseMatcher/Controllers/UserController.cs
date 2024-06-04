@@ -1,6 +1,7 @@
 ﻿using HouseMatcher.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,14 +18,15 @@ namespace HouseMatcher.Controllers
         public readonly HouseMatcherContext _HouseMatcherContext;
         public readonly IConfiguration _configuration;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        public readonly IWebHostEnvironment _env;
         private int UserId;
 
-        public UserController(HouseMatcherContext houseMatcherContext, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
+        public UserController(HouseMatcherContext houseMatcherContext, IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IWebHostEnvironment env)
         {
             _HouseMatcherContext = houseMatcherContext;
             _configuration = configuration;
             _httpContextAccessor = httpContextAccessor;
-
+            _env = env;
             Claim UserIdString = httpContextAccessor.HttpContext.User.FindFirst(data => data.Type == "UserId");
             if(UserIdString != null)
             {
@@ -32,11 +34,13 @@ namespace HouseMatcher.Controllers
             }
         }
 
+        [AllowAnonymous]
         public IActionResult LoginPage()
         {
             return View();
         }
 
+        [AllowAnonymous]
         public IActionResult RegisterPage()
         {
             return View();
@@ -49,6 +53,7 @@ namespace HouseMatcher.Controllers
         }
 
         //登入
+        [AllowAnonymous]
         [HttpPost]
         public async Task<ActionResult> Login([FromBody] UserLoginDto LoginData)
         {
@@ -94,20 +99,29 @@ namespace HouseMatcher.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public ActionResult Register([FromBody] UserRegisterDto value)
         {
-            string hashedPassword = HashPassword(value.UserPassword);
+            List<UserData> SameEmailUser = _HouseMatcherContext.UserData.Where(UserData => UserData.UserEmail == value.UserEmail).ToList();
 
-            UserData postUserData = new UserData()
+            if(SameEmailUser.Count > 0)
             {
-                UserEmail = value.UserEmail,
-                UserName = value.UserName,
-                UserPassword = hashedPassword
-            };
-            _HouseMatcherContext.UserData.Add(postUserData);
-            _HouseMatcherContext.SaveChanges();
-            return Ok("新增成功");
+                return BadRequest("此信箱已被註冊");
+            } else
+            {
+                string hashedPassword = HashPassword(value.UserPassword);
+
+                UserData postUserData = new UserData()
+                {
+                    UserEmail = value.UserEmail,
+                    UserName = value.UserName,
+                    UserPassword = hashedPassword
+                };
+                _HouseMatcherContext.UserData.Add(postUserData);
+                _HouseMatcherContext.SaveChanges();
+                return Ok("註冊成功");
+            }
         }
 
         public string HashPassword(string UnhashedPassword)
@@ -124,6 +138,7 @@ namespace HouseMatcher.Controllers
             return hashedPassword;
         }
 
+        [AllowAnonymous]
         public async Task Logout()
         {
             // Clear the existing external cookie
@@ -133,19 +148,59 @@ namespace HouseMatcher.Controllers
 
         //修改使用者資料
         [HttpPut]
-        public ActionResult UserPut([FromBody] UserDataPutDto value)
+        public async Task<ActionResult> UserPut([FromBody] UserDataPutDto value)
         {
+            List<UserData> SameEmailUser = _HouseMatcherContext.UserData.Where(UserData => UserData.UserEmail == value.UserEmail).ToList();
             UserData targetUser = _HouseMatcherContext.UserData.Where(user => user.UserId == UserId).FirstOrDefault();
 
-            targetUser.UserName = value.UserName;
-            targetUser.UserEmail = value.UserEmail;
-            targetUser.UserLocation = value.UserLocation;
-            targetUser.UserDescription = value.UserDescription;
-            targetUser.UserPhoneNumber = value.UserPhoneNumber;
-            targetUser.UserImgId = value.UserImgId;
+            if (SameEmailUser.Count > 0 && targetUser.UserEmail != value.UserEmail)
+            {
+                return BadRequest("此信箱已被註冊");
+            } else
+            {
+                if(targetUser.UserImgId != value.UserImgId && targetUser.UserImgId != null && targetUser.UserImgId != "")
+                {
+                    string filePath = _env.ContentRootPath + @"\wwwroot\" + targetUser.UserImgId;
+                    System.IO.File.Delete(filePath);
+                }
 
-            _HouseMatcherContext.SaveChanges();
-            return Ok("更新成功");
+                targetUser.UserName = value.UserName;
+                targetUser.UserEmail = value.UserEmail;
+                targetUser.UserLocation = value.UserLocation;
+                targetUser.UserDescription = value.UserDescription;
+                targetUser.UserPhoneNumber = value.UserPhoneNumber;
+                targetUser.UserImgId = value.UserImgId;
+
+                _HouseMatcherContext.SaveChanges();
+
+                // 更新聲明
+                var identity = (ClaimsIdentity)User.Identity;
+                identity.RemoveClaim(identity.FindFirst(ClaimTypes.Email));
+                identity.RemoveClaim(identity.FindFirst(ClaimTypes.Name));
+                identity.RemoveClaim(identity.FindFirst("UserId"));
+                identity.RemoveClaim(identity.FindFirst("UserImg"));
+
+                identity.AddClaim(new Claim(ClaimTypes.Email, value.UserEmail));
+                identity.AddClaim(new Claim(ClaimTypes.Name, value.UserName));
+                identity.AddClaim(new Claim("UserId", targetUser.UserId.ToString()));
+
+                if (value.UserImgId != null)
+                {
+                    identity.AddClaim(new Claim("UserImg", value.UserImgId));
+                }
+                else
+                {
+                    identity.AddClaim(new Claim("UserImg", ""));
+                }
+
+                // 重新登入使用者，以應用新的聲明
+                await HttpContext.SignInAsync(
+                    CookieAuthenticationDefaults.AuthenticationScheme,
+                    new ClaimsPrincipal(identity),
+                    new AuthenticationProperties { IsPersistent = true });
+
+                return Ok("資料更新成功");
+            }
         }
     }
 }

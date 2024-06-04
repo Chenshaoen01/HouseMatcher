@@ -75,7 +75,7 @@
                             {
                                 foreach (var feature in Model.FeatureList)
                                 {
-                                        <div class="custom-option" data-value="@feature.LabelId">@feature.LabelName</div>
+                                    <div class="custom-option" data-value="@feature.LabelId">@feature.LabelName</div>
                                 }
                             }
                         }
@@ -117,21 +117,21 @@
 
         const disctictArr = notEmpty(urlParams.district)? urlParams.district.split('+') : []
         cityData.forEach(city => {
-            if (city.CityEngName !== "Diauyutai") {
+            if (city.CityEngName !== "Diauyutai" && city.CityEngName !== "Nanhai") {
                 let selectedDisctictCount = 0
                 city.AreaList.forEach(area => {
                     let districtSelectedString = ''
-                    if (disctictArr.indexOf(area.AreaName) != -1) {
+                    if (disctictArr.indexOf(getDistrictParams(area.AreaName, city.CityName)) != -1) {
                         districtSelectedString = 'custom-selected-option'
                         selectedDisctictCount ++
                     }
 
                     // 寫入鄉鎮市區選項
                     $('#district-options').append(
-                        `<div class="custom-option-muti-layer ${districtSelectedString} d-none" data-value="${area.AreaName}"
-                                     data-layer-index="2" data-parent-option="${city.CityEngName}">
-                                 ${area.AreaName}
-                            </div>`
+                        `<div class="custom-option-muti-layer ${districtSelectedString} d-none" data-layer-index="2"
+                              data-value="${area.AreaName}" data-parent-conuty-name="${city.CityName}" data-parent-option="${city.CityEngName}">
+                             ${area.AreaName}
+                         </div>`
                     )
                 })
 
@@ -152,16 +152,33 @@
             $(item).find('.custom-select-value-text').text(`${totalNumString}`)
         })
 
-        function getSelectedOptions(targetSelectId) {
+        function getDistrictParams(districtName, cityName) {
+            return districtName + '$' + cityName
+        }
+
+        function getSelectedDistrictOptions(targetSelectId) {
             const selectedDistrictOptions = $(`#${targetSelectId}`).find('.custom-selected-option')
             let selectedDistrictData = ""
 
             selectedDistrictOptions.each((index, item) => {
                 const connectionString = index === selectedDistrictOptions.length -1 ? "" : "+"
-                selectedDistrictData = selectedDistrictData + $(item).data('value') + connectionString
+                const dictrictInfo = getDistrictParams($(item).data('value'), $(item).data('parent-conuty-name'))
+                selectedDistrictData = selectedDistrictData + dictrictInfo + connectionString
             })
 
             return selectedDistrictData
+        }
+
+        function getSelectedOptions(targetSelectId) {
+            const selectedOptions = $(`#${targetSelectId}`).find('.custom-selected-option')
+            let selectedDataString = ""
+
+            selectedOptions.each((index, item) => {
+                const connectionString = index === selectedOptions.length - 1 ? "" : "+"
+                selectedDataString = selectedDataString + $(item).data('value') + connectionString
+            })
+
+            return selectedDataString
         }
 
         //更新房租上限下限
@@ -186,10 +203,12 @@
         changeRentText()
 
         $('#search-button').on('click', function() {
-            const selectedDistrictData = getSelectedOptions('district-options')
+            const selectedDistrictData = getSelectedDistrictOptions('district-options')
             const selectedFeatureData = getSelectedOptions('feature-options')
 
-            const searchUrl = new URL(window.location.origin + '/House/Search')
+            const targetPathName = window.location.pathname === '/House/SearchMap' ? '/House/SearchMap' : '/House/Search'
+            const searchUrl = new URL(window.location.origin + targetPathName)
+
             searchUrl.searchParams.append('Page', 1)
             searchUrl.searchParams.append('Disctict', selectedDistrictData)
             searchUrl.searchParams.append('MaxRent', $('#rent-upper-limit').val())

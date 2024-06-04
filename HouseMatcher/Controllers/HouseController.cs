@@ -13,13 +13,17 @@ namespace HouseMatcher.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        public readonly IWebHostEnvironment _env;
         public readonly HouseMatcherContext _HouseMatcherContext;
         private int UserId;
+        private bool IsLogIn;
 
-        public HouseController(ILogger<HomeController> logger, IHttpContextAccessor httpContextAccessor, HouseMatcherContext houseMatcherContext)
+        public HouseController(ILogger<HomeController> logger, IHttpContextAccessor httpContextAccessor, HouseMatcherContext houseMatcherContext, IWebHostEnvironment env)
         {
             _logger = logger;
             _HouseMatcherContext = houseMatcherContext;
+            _env = env;
+            IsLogIn = httpContextAccessor.HttpContext.User.Identity.IsAuthenticated;
             Claim UserIdString = httpContextAccessor.HttpContext.User.FindFirst(data => data.Type == "UserId");
             if (UserIdString != null)
             {
@@ -33,6 +37,7 @@ namespace HouseMatcher.Controllers
             return View();
         }
 
+        [AllowAnonymous]
         //地圖搜尋頁面
         public IActionResult SearchMap(string? Disctict, int? MaxRent, int? MinRent, string? Feature)
         {
@@ -48,16 +53,26 @@ namespace HouseMatcher.Controllers
             return View(viewModel);
         }
 
+        [AllowAnonymous]
         //詳細租屋資訊頁面
         public IActionResult Detail(Guid Id)
         {
-            HouseListViewModel viewModel = new HouseListViewModel();
+            HouseDetailViewModel viewModel = new HouseDetailViewModel();
             viewModel.FeatureList = GetFeatureLabelList();
 
             List<HouseData> houseDataResult = _HouseMatcherContext.HouseData
                 .Where(houseData => houseData.HouseId == Id)
                 .Select(houseData => houseData).ToList();
-            viewModel.HouseList = getHouseDataGetList(houseDataResult);
+            if(houseDataResult.Count > 0)
+            {
+                viewModel.HouseList = getHouseDataGetList(houseDataResult);
+                viewModel.HouseOwnerName = _HouseMatcherContext.UserData
+                .Where(userData => userData.UserId == houseDataResult[0].UserId).First();
+            } else
+            {
+                viewModel.HouseList = new List<HouseDataGetDto>() { };
+                viewModel.HouseOwnerName = new UserData() { };
+            }
 
             ViewBag.IsEdit = true;
             return View(viewModel);
@@ -90,6 +105,7 @@ namespace HouseMatcher.Controllers
             return View(viewModel);
         }
 
+        [AllowAnonymous]
         //搜尋頁面
         public IActionResult Search(int Page, string? Disctict, int? MaxRent, int? MinRent, string? Feature)
         {
@@ -125,7 +141,7 @@ namespace HouseMatcher.Controllers
             List<string> HouseIdListMatchFeatureIdList = GetHouseIdListMatchFeatureIdList(FeatureIdList);
 
             List<HouseData> houseDataResult = _HouseMatcherContext.HouseData
-            .Where(houseData => DisctictList.Count() == 0 ? true : DisctictList.Contains(houseData.District))
+            .Where(houseData => DisctictList.Count() == 0 ? true : DisctictList.Contains(houseData.District + '$' + houseData.City))
             .Where(houseData => MaxRent == null ? true : MaxRent >= houseData.RentPerMonth)
             .Where(houseData => MinRent == null ? true : MinRent <= houseData.RentPerMonth)
             .Where(houseData => FeatureIdList.Count() == 0 ? true : HouseIdListMatchFeatureIdList.Contains(houseData.HouseId.ToString()))
@@ -252,15 +268,20 @@ namespace HouseMatcher.Controllers
             }
 
             _HouseMatcherContext.SaveChanges();
-            return Ok("新增成功");
+            return Ok("房屋資訊新增成功");
         }
 
         //修改房屋資訊
         [HttpPut]
-        public ActionResult HousePut([FromBody] HouseDataPutDto value)
+        public async Task<ActionResult> HousePut([FromBody] HouseDataPutDto value)
         {
             string name = value.HouseName;
             HouseData targetHouseData = _HouseMatcherContext.HouseData.Where(HouseData => HouseData.HouseId == value.HouseId).FirstOrDefault();
+
+            if (targetHouseData.HouseImg != value.HouseImg)
+            {
+                deletePreImg(targetHouseData.HouseImg);
+            }
 
             targetHouseData.HouseName = value.HouseName;
             targetHouseData.Description = value.Description;
@@ -304,31 +325,51 @@ namespace HouseMatcher.Controllers
             }
 
             _HouseMatcherContext.SaveChanges();
-            return Ok("更新成功");
+            return Ok("房屋資訊儲存成功");
         }
 
         [HttpDelete]
-        public ActionResult HouseDelete(Guid id)
+        public async Task<ActionResult> HouseDelete(Guid id)
         {
-            var HouseDeleteTarget = _HouseMatcherContext.HouseData.Find(id);
-            var FeatureDeleteTarget = _HouseMatcherContext.FeatureLabelDictionary.Where(feature => feature.HouseDataId == id);
+            var HouseDeleteTarget = _HouseMatcherContext.HouseData.Where(houseData => houseData.HouseId == id && houseData.UserId == UserId);
             if (HouseDeleteTarget == null)
             {
                 return NotFound("無此資料");
             }
             else
             {
+                var FeatureDeleteTarget = _HouseMatcherContext.FeatureLabelDictionary.Where(feature => feature.HouseDataId == id);
+                //刪除房屋圖片
+                foreach (var currentImg in HouseDeleteTarget)
+                {
+                    deletePreImg(currentImg.HouseImg);
+                }
+
                 //刪除房屋特色資料
                 foreach (var FeatureLabel in FeatureDeleteTarget)
                 {
                     _HouseMatcherContext.FeatureLabelDictionary.RemoveRange(FeatureLabel);
                 }
 
+                var MessageDeleteTarget = _HouseMatcherContext.MessageData.Where(feature => feature.HouseDataId == id);
+                //刪除房屋訊息資料
+                foreach (var deleteMessage in MessageDeleteTarget)
+                {
+                    _HouseMatcherContext.MessageData.RemoveRange(deleteMessage);
+                }
+
                 //刪除房屋資料
                 _HouseMatcherContext.HouseData.RemoveRange(HouseDeleteTarget);
                 _HouseMatcherContext.SaveChanges();
-                return Ok("刪除成功");
+
+                return Ok("房屋資訊刪除成功");
             }
+        }
+
+        public void deletePreImg(string imgUrl)
+        {
+            string filePath = _env.ContentRootPath + @"\wwwroot\" + imgUrl;
+            System.IO.File.Delete(filePath);
         }
 
         public List<FeatureLabelList> GetFeatureLabelList()

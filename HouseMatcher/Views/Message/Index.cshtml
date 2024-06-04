@@ -1,74 +1,227 @@
-﻿<div class="d-flex justify-content-center h-100">
-    <div class="main-content py-5">
-        <div class="list-card-link message-card d-block cursor-pointer" data-bs-toggle="modal" data-bs-target="#exampleModal">
-            <div class="list-card">
-                <div class="px-4 py-3 w-100">
-                    <p class="fs-5 fw-bold mb-2">屋主：陳先生</p>
-                    <p class="fs-6 fw-bold mb-2">文化路套房</p>
-                    <div class="devider my-3"></div>
-                    <p class="fs-6 fw-bold mb-2">林先生：您好我想預約看屋</p>
-                </div>
-            </div>
-        </div>
+﻿@{
+    string UserId = "";
+    if (User.Identity.IsAuthenticated)
+    {
+        UserId = @User.FindFirst(type => type.Type == "UserId").Value;
+    }
+}
+<div class="d-flex flex-column justify-content-center align-items-center h-100">
+    <div id="house-message-card-area" class="main-content py-5"></div>
+    <div class="no-message-hint mb-3 d-none">
+        <p class="text-center mb-0">
+            <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" fill="currentColor" class="bi bi-envelope-x-fill" viewBox="0 0 16 16">
+                <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414zM0 4.697v7.104l5.803-3.558zM6.761 8.83l-6.57 4.026A2 2 0 0 0 2 14h6.256A4.5 4.5 0 0 1 8 12.5a4.49 4.49 0 0 1 1.606-3.446l-.367-.225L8 9.586zM16 4.697v4.974A4.5 4.5 0 0 0 12.5 8a4.5 4.5 0 0 0-1.965.45l-.338-.207z" />
+                <path d="M16 12.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0m-4.854-1.354a.5.5 0 0 0 0 .708l.647.646-.647.646a.5.5 0 0 0 .708.708l.646-.647.646.647a.5.5 0 0 0 .708-.708l-.647-.646.647-.646a.5.5 0 0 0-.708-.708l-.646.647-.646-.647a.5.5 0 0 0-.708 0" />
+            </svg>
+        </p>
+        <h5 class="text-center fw-bold mt-5">收件匣尚無訊息</h5>
     </div>
 </div>
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="message-modal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header p-3 align-items-start">
                 <div class="d-flex flex-column">
-                    <p class="fs-5 fw-bold mb-1">屋主：陳先生</p>
-                    <p class="fs-6 fw-bold mb-1">文化路套房</p>
+                    @* 房屋名稱 *@
+                    <p id="message-modal-house-name" class="text-start fs-5 fw-bold mb-1"></p>
+                    @* 聯絡人名稱 *@
+                    <p id="message-modal-user-name" class="text-start fs-6 fw-bold mb-1"></p>
                 </div>
                 <button type="button" class="btn-close mt-2" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <div class="message-content-area">
-                    <div class="message-sent">
-                        <span>陳先生</span>
-                        <div class="message-sent-text">您好明天下午一點方便嗎</div>
-                        <div class="message-time-text">2024/4/11 11:43</div>
-                    </div>
-                    <div class="message-received">
-                        <span>陳先生</span>
-                        <div class="message-received-text">您好明天下午一點方便嗎</div>
-                        <div class="message-time-text">2024/4/11 11:43</div>
-                    </div>
-                </div>
+            <div class="modal-body position-relative pt-2">
+                @* 訊息區域 *@
+                <div class="message-content-area"></div>
+                <button id="scroll-down-button" class="scroll-down-button d-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1" />
+                    </svg>
+                </button>
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer border-top">
                 <div class="d-flex flex-column align-items-end w-100">
-                    <input type="text" class="w-100 mb-3"/>
-                    <button class="btn bg-blue border border-dark fw-bold">送出</button>
+                    <textarea id="message-input" type="text" class="w-100 form-control my-3"></textarea>
+                    <button id="message-submit" class="custom-button fw-bold"
+                            data-sender-id="@UserId">
+                        送出
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 </div>
-@* <div class="container">
-    <div class="row p-1">
-        <div class="col-2"><span class="text-nowrap">要發訊息給誰</span></div>
-        <div class="col-5"><input type="text" id="userInput" /></div>
-    </div>
-    <div class="row p-1">
-        <div class="col-2"><span class="text-nowrap">要說甚麼</span></div>
-        <div class="col-5"><input type="text" class="w-100" id="messageInput" /></div>
-    </div>
-    <div class="row p-1">
-        <div class="col-6 text-end">
-            <input type="button" id="sendButton" value="送出" />
-        </div>
-    </div>
-    <div class="row p-1">
-        <div class="col-6">
-            <hr />
-        </div>
-    </div>
-    <div class="row p-1">
-        <div class="col-6">
-            <ul id="messagesList"></ul>
-        </div>
-    </div>
-</div> *@
+
 <script src="~/js/signalr/dist/browser/signalr.js"></script>
 <script src="~/js/chat.js"></script>
+
+<script>
+    const myUserId = parseInt('@UserId')
+    let messageData = {}
+
+    // 將訊息依房屋 Id 分組寫入 messageData
+    function sortMessage(messageSourceData) {
+        if(messageSourceData.length > 0) {
+            messageSourceData.forEach(message => {
+                const submitReciever = message.senderId === myUserId ? message.receiverId : message.senderId
+                message.SubmitReceiver = submitReciever
+                message.messageCardKey = message.houseDataId + submitReciever
+
+                updateMessageData(message)
+            })
+            createHouseMessageCardList()
+        } else {
+            $('.no-message-hint').removeClass('d-none')
+        }
+    }
+
+    // 更新訊息資訊
+    function updateMessageData(message) {
+        const isNewHouse = messageData[message.messageCardKey] === undefined || messageData[message.messageCardKey] === null
+
+        if (isNewHouse) {
+            messageData[message.messageCardKey] = {
+                messageCardKey: message.messageCardKey,
+                houseDataId: message.houseDataId,
+                houseName: message.houseName,
+                submitReceiverId: message.senderId === myUserId ? message.receiverId : message.senderId,
+                messageList: []
+            }
+        }
+
+        messageData[message.messageCardKey].messageList.push(message)
+    }
+
+    // 更新所有訊息卡片內容
+    function createHouseMessageCardList() {
+        for (let key in messageData) {
+            const targetHouseCardData = messageData[key]
+
+            updateMessageCard(targetHouseCardData)
+        }
+    }
+
+    // 更新個別訊息卡片內容
+    function updateMessageCard(targetHouseCardData) {
+        const $targetMessageCard = $(`.house-message-card[data-message-card-key="${targetHouseCardData.messageCardKey}"]`)
+
+        const lastMessage = targetHouseCardData.messageList[targetHouseCardData.messageList.length - 1]
+        const contactUserName = lastMessage.senderId === myUserId ? lastMessage.receiverName : lastMessage.senderName
+        const messageSenderNameString = lastMessage.senderId === myUserId ? '我' : lastMessage.senderName
+        const contactUserTitle = lastMessage.isMyHouse ? '租客' : '屋主'
+
+        if ($targetMessageCard.length === 0) {
+            $('#house-message-card-area').append(
+            `<div class="list-card-link house-message-card d-block cursor-pointer mb-3"
+                  data-message-card-key="${targetHouseCardData.messageCardKey}">
+                    <div class="list-card">
+                        <div class="px-4 py-3 w-100">
+                            <p class="fs-5 fw-bold mb-2">${targetHouseCardData.houseName}</p>
+                            <p class="fs-7 fw-bold mb-2">${contactUserTitle}：${contactUserName}</p>
+                            <div class="devider my-3"></div>
+                            <p class="last-message d-flex fs-6 fw-bold mb-2">
+                                <span class="text-nowrap">${messageSenderNameString}：</span>
+                                <span class="last-message-text">${lastMessage.messageDescription}</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>`)
+        } else {
+            $targetMessageCard.find('.last-message-text').text(lastMessage.messageDescription)
+        }
+
+        $('.no-message-hint').addClass('d-none')
+    }
+
+    function dateTimeTransform(dateTime) {
+        targetDateTimeItem = new Date(dateTime)
+        const targetYear = targetDateTimeItem.getFullYear()
+        const targetMonth = targetDateTimeItem.getMonth() + 1
+        const targetDate = targetDateTimeItem.getDate()
+        const targetHour = targetDateTimeItem.getHours()
+        const targetMinute = targetDateTimeItem.getMinutes()
+
+        return `${targetYear}/${targetMonth}/${targetDate} ${targetHour}:${targetMinute}`
+    }
+
+    $(document).ready(function() {
+        // 監聽訊息區域滾動事件，滾動後高度不是底部的話 顯示「滑動到最下方按鈕」
+        $('.message-content-area').scroll(function () {
+            var messageContentArea = $(this);
+            var scrollHeight = messageContentArea.prop('scrollHeight');
+            var scrollPosition = messageContentArea.scrollTop() + messageContentArea.innerHeight();
+
+            if (scrollPosition < scrollHeight - 20) {
+                $('#scroll-down-button').removeClass('d-none');
+            } else {
+                $('#scroll-down-button').addClass('d-none');
+            }
+        });
+
+        // 「滑動到最下方按鈕」點擊後滑動到最下方
+        $(document).on('click', '#scroll-down-button', function() {
+            scrollToBottom()
+        })
+
+        function scrollToBottom() {
+            console.log($('.message-content-area')[0].scrollHeight)
+            $('.message-content-area').scrollTop($('.message-content-area')[0].scrollHeight);
+            $('#scroll-down-button').addClass('d-none');
+        }
+
+        // AJAX 取得訊息列表
+        function getMessageList() {
+            const targetUrl = new URL(window.location.origin + '/Message/MessageListByReceiverId')
+            targetUrl.searchParams.set('id', myUserId)
+
+            showLoading()
+            $.ajax({
+                url: targetUrl,
+                method: 'GET',
+                success: function (res) {
+                    sortMessage(res)
+                    hideLoading()
+                },
+                error: function (err) { console.log(err) },
+            });
+        }
+
+        getMessageList()
+
+        // 點擊各房屋訊息卡片後，開啟視窗並寫入訊息
+        $(document).on('click', '.house-message-card', function() {
+            const targetMessageCardKey = $(this).data('message-card-key')
+            const targetMessageData = messageData[targetMessageCardKey]
+            
+            const lastMessage = targetMessageData.messageList[targetMessageData.messageList.length - 1]
+            const messageCardKey = lastMessage.messageCardKey
+            const targetHouseId = lastMessage.houseDataId
+            const contactUserName = lastMessage.senderId === myUserId ? lastMessage.receiverName : lastMessage.senderName
+            const contactUserId = lastMessage.senderId === myUserId ? lastMessage.receiverId : lastMessage.senderId
+            const myUserName = lastMessage.senderId === myUserId ? lastMessage.senderName : lastMessage.receiverName
+
+            $('#message-modal-user-name').text(contactUserName)
+            $('#message-modal-house-name').text(targetMessageData.houseName)
+
+            $('#message-modal').modal('show')
+            $('.message-content-area').html('')
+            targetMessageData.messageList.forEach(message => {
+                addNewMessage(message)
+            })
+
+            $('#message-submit').attr('data-message-card-key', messageCardKey)
+            $('#message-submit').attr('data-receiver-id', contactUserId)
+            $('#message-submit').attr('data-receiver-name', contactUserName)
+            $('#message-submit').attr('data-sender-name', myUserName)
+            $('#message-submit').attr('data-house-id', targetHouseId)
+            $('#message-submit').attr('data-house-name', lastMessage.houseName)
+
+            setTimeout(function() {
+                scrollToBottom()
+            }, 500)
+        })
+
+        $(document).on('click', '#message-submit', function () {
+            messageSubmit()
+        })
+    })
+</script>

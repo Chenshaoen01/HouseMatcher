@@ -37,10 +37,10 @@
                         string inputDisplay = isImgExist ? "d-none" : "d-block";
                         string imgAndDeleteButtonDisplay = isImgExist ? "d-block" : "d-none";
                     }
-                    <div class="d-flex justify-content-start align-items-start">
-                        <img id="form-img" src="@HouseImgUrl" class="w-50 form-img @imgAndDeleteButtonDisplay"
+                    <div class="d-flex flex-column flex-md-row justify-content-start align-items-start">
+                        <img id="form-img" src="@HouseImgUrl" class="form-img @imgAndDeleteButtonDisplay"
                              data-origin-img-url="@CurrentHouseData.HouseImg" />
-                        <button id="delete-img-button" type="button" class="ms-3 custom-button custom-button-red @imgAndDeleteButtonDisplay">刪除</button>
+                        <button id="delete-img-button" type="button" class="ms-0 ms-md-3 mt-3 mt-md-0 custom-button custom-button-red @imgAndDeleteButtonDisplay">刪除</button>
                     </div>
                     <label for="image-input" class="form-label">
                         <input id="image-input" class="form-control @inputDisplay" type="file">
@@ -119,9 +119,9 @@
                                             foreach (var feature in Model.FeatureList)
                                             {
                                                 string selectedClassString = SelectedLabelsIdList.Contains(feature.LabelId) ? "custom-selected-option" : "";
-                                                <div class="custom-option @selectedClassString" data-value="@feature.LabelId" data-name="@feature.LabelName">
-                                                    @feature.LabelName
-                                                </div>
+                                                    <div class="custom-option @selectedClassString" data-value="@feature.LabelId" data-name="@feature.LabelName">
+                                                        @feature.LabelName
+                                                    </div>
                                             }
                                         }
                                     }
@@ -134,32 +134,61 @@
                 <p class="text-start mb-2 fw-bold">房屋地址：</p>
                 <div class="address-box mb-3">
                     <div class="mb-3 w-100 d-flex flex-column flex-md-row">
+                        @{
+                            string CityInitValue = CurrentHouseData.City != null && CurrentHouseData.City != "" ? CurrentHouseData.City : "請選擇縣市";
+                            string DistrictInitValue = CurrentHouseData.District != null && CurrentHouseData.District != "" ? CurrentHouseData.District : "請選擇鄉鎮市區";
+                            string RoadInitValue = CurrentHouseData.Road != null && CurrentHouseData.Road != "" ? CurrentHouseData.Road : "請選擇道路名稱";
+                        }
                         <div class="w-100 w-md-50 pe-0 pe-md-2">
                             <div class="d-flex justify-content-between mb-2 fw-bold">
                                 <span>縣市：</span>
                                 <span id="city-validate-text" class="text-danger"></span>
                             </div>
-                            <select id="city-input" class="form-select border-dark" data-value="@CurrentHouseData.City">
-                                <option selected disabled>請選擇縣市</option>
-                            </select>
+                            <div class="custom-select w-100" data-placeholder="請選擇縣市">
+                                <div class="custom-select-value custom-select-value-high">
+                                    <span id="city-custom-select-value" class="custom-select-value-text">@CityInitValue</span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor"
+                                         class="custom-select-arrow custom-select-arrow-reverse bi bi-chevron-down" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708" />
+                                    </svg>
+                                </div>
+                                <div id="city-custom-options" class="custom-options overflow-auto d-none"></div>
+                            </div>
+                            <input id="city-input" class="d-none" type="text" value="@CurrentHouseData.City" />
                         </div>
                         <div class="w-100 w-md-50">
                             <div class="d-flex justify-content-between mb-2 fw-bold">
                                 <span>鄉鎮市區：</span>
                                 <span id="district-validate-text" class="text-danger"></span>
                             </div>
-                            <select id="district-input" class="form-select border-dark" data-value="@CurrentHouseData.District">
-                                <option selected disabled>請選擇鄉鎮市區</option>
-                            </select>
+                            <div class="custom-select w-100" data-placeholder="請選擇鄉鎮市區">
+                                <div class="custom-select-value custom-select-value-high">
+                                    <span id="district-custom-select-value" class="custom-select-value-text">@DistrictInitValue</span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor"
+                                         class="custom-select-arrow custom-select-arrow-reverse bi bi-chevron-down" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708" />
+                                    </svg>
+                                </div>
+                                <div id="district-custom-options" class="custom-options overflow-auto d-none"></div>
+                            </div>
+                            <input id="district-input" class="d-none" type="text" value="@CurrentHouseData.District" />
                         </div>
                         <div class="w-100 w-md-50 ps-0 ps-md-2">
                             <div class="d-flex justify-content-between mb-2 fw-bold">
                                 <span>道路名稱：</span>
                                 <span id="road-validate-text" class="text-danger"></span>
                             </div>
-                            <select id="road-input" class="form-select border-dark" data-value="@CurrentHouseData.Road">
-                                <option selected disabled>請選擇道路名稱</option>
-                            </select>
+                            <div class="custom-select w-100" data-placeholder="請選擇道路名稱">
+                                <div class="custom-select-value custom-select-value-high">
+                                    <span id="road-custom-select-value" class="custom-select-value-text">@RoadInitValue</span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor"
+                                         class="custom-select-arrow custom-select-arrow-reverse bi bi-chevron-down" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708" />
+                                    </svg>
+                                </div>
+                                <div id="road-custom-options" class="custom-options overflow-auto d-none"></div>
+                            </div>
+                            <input id="road-input" type="text" class="d-none" value="@CurrentHouseData.Road" />
                         </div>
                     </div>
                     @* 詳細地址 *@
@@ -168,7 +197,7 @@
                             <span>詳細地址：</span>
                             <span id="detail-address-hint"></span>
                         </div>
-                        <label class="mb-3 w-100 d-flex align-items-center">
+                        <label class="mb-3 w-100 d-flex flex-column flex-md-row align-items-start align-items-md-center">
                             <span id="detail-address-first-part" class="fs-6 fw-bold text-nowrap text-secondary me-2 d-none">
                                 <span id="detail-address-city"></span>
                                 <span id="detail-address-district"></span>
@@ -180,7 +209,7 @@
                     </div>
                     <span id="address-lat" data-value="@CurrentHouseData.Latitude"></span>
                     <span id="address-lng" data-value="@CurrentHouseData.Longitude"></span>
-                    <div id="map" class="map-box"></div>
+                    <div id="map" class="map-box form-map"></div>
                 </div>
                 @* 房屋描述 *@
                 <div class="mb-3">
@@ -263,20 +292,6 @@
         formMode = "put"
         $('#form-post-submit').addClass('d-none')
         $('#form-put-submit').removeClass('d-none')
-
-        // 編輯模式設定地圖中心、放置圖釘
-        const preLat = $('#address-lat').data('value')
-        const preLng = $('#address-lng').data('value')
-
-        lat = preLat
-        lng = preLng
-
-        map.setZoom(15);
-        map.setCenter({
-            lat: preLat,
-            lng: preLng
-        });
-        addMarker(getCurrentAddress(), preLat, preLng)
     })
 
     // 上傳圖片
@@ -292,6 +307,9 @@
                     processData: false,
                     contentType: false,
                     success: function (res) { resolve(res) },
+                    error: function (err) {
+                        reject(err)
+                    },
                 });
             } else {
                 resolve("")
@@ -345,18 +363,18 @@
     // 送出按鈕點擊事件
     $(document).on('click', '.form-submit-button',async function () {
         const submitData = {
-           HouseName: $('#house-name-input').val(),
-           Description: editor.getData(),
-           Location: $('#address-input').val(),
-           HouseSize: parseInt($('#house-size-input').val()),
-           RentPerMonth: parseInt($('#rent-input').val()),
-           City: $('#city-input').val(),
-           District: $('#district-input').val(),
-           Road: $('#road-input').val(),
-           Latitude: lat,
-           Longitude: lng,
-           FeaturLabelList: getFeatureLabelPostData(),
-           HouseImg: ""
+            HouseName: $('#house-name-input').val(),
+            Description: editor.getData(),
+            Location: $('#address-input').val(),
+            HouseSize: parseInt($('#house-size-input').val()),
+            RentPerMonth: parseInt($('#rent-input').val()),
+            City: $('#city-input').val(),
+            District: $('#district-input').val(),
+            Road: $('#road-input').val(),
+            Latitude: lat,
+            Longitude: lng,
+            FeaturLabelList: getFeatureLabelPostData(),
+            HouseImg: ""
         }
         if(formMode === 'put') {
             submitData.HouseId = $('#house-id').data('house-id')
@@ -371,58 +389,82 @@
         }
 
         if (validateBeforeSubmit(validateDataList, submitData)) {
+            showLoading()
             if (imgState === 'new') {
                 await imgUpload().then((res) => {
                     submitData.HouseImg = res.id + res.fileType
+                    doHouseDataSave(submitData)
+                }).catch((err) => {
+                    showHint(err.responseText)
+                    hideLoading()
                 })
+            } else {
+                doHouseDataSave(submitData)
             }
+        } else {
+            const inValidColumnList = validateDataList.filter(column => {
+                const isValidTextEmpty = $(`#${column.validateTextId}`).text() === null || $(`#${column.validateTextId}`).text() === ""
+                return !isValidTextEmpty
+            })
 
-            $.ajax({
-                url: formMode === 'post' ? '@Url.Action("HousePost", "House")' : '@Url.Action("HousePut", "House")',
-                method: formMode,
-                data: JSON.stringify(submitData),
-                contentType: 'application/json',
-                success: function (res) {
-                    saveMessageAndRefresh(res)
-                },
-                error: function (err) { console.log(err) },
-            });
+            let inVaildCoumnIndex = 0
+            const inValidColumnName = inValidColumnList.reduce((accumulator, currentValue) => {
+                const connectionString = inVaildCoumnIndex === 0? "" : "、"
+                accumulator = accumulator + connectionString + currentValue.columnName
+                inVaildCoumnIndex ++
+                return accumulator
+            }, "")
+
+            showHint(inValidColumnName+"為必填項目")
         }
     })
+
+    function doHouseDataSave(submitData) {
+        $.ajax({
+            url: formMode === 'post' ? '@Url.Action("HousePost", "House")' : '@Url.Action("HousePut", "House")',
+            method: formMode,
+            data: JSON.stringify(submitData),
+            contentType: 'application/json',
+            success: function (res) {
+                saveMessageAndRefresh(res)
+                hideLoading()
+                localStorage.setItem('need-refresh', true)
+            },
+            error: function (err) {
+                showHint(err.responseText)
+                hideLoading()
+            },
+        });
+    }
 
     // 寫入縣市選項、原先的鄉鎮市區/道路名稱、更新詳細地址
-    const currentCity = $('#city-input').data('value')
+    const currentCity = $('#city-custom-select-value').text()
     cityData.forEach(city => {
-        if (city.CityEngName !== "Diauyutai") {
-            const selectedString = currentCity === city.CityName ? 'selected' : ''
-            $('#city-input').append(`<option value="${city.CityName}" ${selectedString}>${city.CityName}</option>`)
+        if (city.CityEngName !== "Diauyutai" && city.CityEngName !== "Nanhai") {
+            let selectedString = ''
+            if (currentCity === city.CityName) {
+                selectedString = 'custom-selected-option'
+                $('#city-custom-select-value').text(city.CityName)
+            }
+
+            $('#city-custom-options').append(`<div class="custom-option-single custom-address-option ${selectedString}" data-option-type="city" data-value="${city.CityName}">${city.CityName}</div>`)
         }
     })
 
-    const currentDistrict = $('#district-input').data('value')
+    const currentDistrict = $('#district-custom-select-value').text()
     if (currentCity) {
         setDictrictItem(currentCity, currentDistrict)
     }
 
-    const currentRoad = $('#road-input').data('value')
+    const currentRoad = $('#road-custom-select-value').text()
     if (currentRoad) {
         setRoadItem(currentCity, currentDistrict, currentRoad)
     }
 
     setDetailAddress()
 
-    // 選擇縣市後：調整鄉鎮市區選項
-    $(document).on('change', '#city-input', function () {
-        const targetCity = $('#city-input').val()
 
-        // 清空道路選項
-        resetRoadSelect()
-        // 設定鄉鎮市區選項
-        setDictrictItem(targetCity)
-        // 更新詳細地址
-        setDetailAddress()
-    })
-
+    // 更新鄉鎮市區選項
     function setDictrictItem(targetCity, selectedDistrict) {
         const targetCityData = cityData.filter(city => {
             return city.CityName === targetCity
@@ -430,27 +472,24 @@
 
         if (targetCityData.length > 0) {
             resetDistrictSelect()
+            $('#district-custom-options').html('')
             targetCityData[0].AreaList.forEach(area => {
-                const selectedString = selectedDistrict === area.AreaName ? 'selected' : ''
-                $('#district-input').append(`<option value="${area.AreaName}" ${selectedString}>${area.AreaName}</option>`)
+                let selectedString = ''
+                if (selectedDistrict === area.AreaName) {
+                    selectedString = 'custom-selected-option'
+                    $('#district-input').val(area.AreaName)
+                    $('#district-custom-select-value').text(area.AreaName)
+                }
+                
+                $('#district-custom-options').append(`<div class="custom-option-single custom-address-option ${selectedString}" data-option-type="district" data-value="${area.AreaName}">${area.AreaName}</div>`)
             })
         }
     }
 
     function resetDistrictSelect() {
-        $('#district-input').html('<option selected disabled>請選擇鄉鎮市區</option>')
+        $('#district-input').val('')
+        $('#district-custom-select-value').text('請選擇鄉鎮市區')
     }
-
-    // 選擇鄉鎮市區選項後調整道路選項
-    $(document).on('change', '#district-input', function () {
-        const targetCity = $('#city-input').val()
-        const targetDistrict = $('#district-input').val()
-
-        // 設定道路選項
-        setRoadItem(targetCity, targetDistrict)
-        // 更新詳細地址
-        setDetailAddress()
-    })
 
     function setRoadItem(targetCity, targetDistrict, selectedRoad) {
         const targetCityData = cityData.filter(city => {
@@ -459,32 +498,99 @@
 
         const targetDistrictData = targetCityData.length > 0 ? targetCityData[0].AreaList.filter(area => area.AreaName === targetDistrict) : []
 
+        $('#road-custom-options').html('')
         if (targetDistrictData.length > 0) {
             resetRoadSelect()
             targetDistrictData[0].RoadList.forEach(road => {
-                const selectedString = selectedRoad === road.RoadName ? 'selected' : ''
-                $('#road-input').append(`<option value="${road.RoadName}" ${selectedString}>${road.RoadName}</option>`)
+                let selectedString = ''
+                if (selectedRoad === road.RoadName) {
+                    selectedString = 'custom-selected-option'
+                    $('#road-input').val(road.RoadName)
+                    $('#road-custom-select-value').text(road.RoadName)
+                }
+
+                $('#road-custom-options').append(`<div class="custom-option-single custom-address-option ${selectedString}"  data-option-type="road" data-value="${road.RoadName}">${road.RoadName}</div>`)
             })
         }
     }
 
     function resetRoadSelect() {
-        $('#road-input').html('<option selected disabled>請選擇道路名稱</option>')
+        $('#road-custom-select-value').text('請選擇道路名稱')
+        $('#road-input').val('')
     }
 
-    // 選擇道路名稱選項後
-    $(document).on('change', '#road-input', function () {
-        // 清空地址內容
-        $('#address-input').val('')
-        // 更新詳細地址
-        setDetailAddress()
+    function afterSingleOptionClick($target) {
+        const newValue = $target.data('value')
+        const targetInputName = $target.data('option-type')
+        const targetInput = $(`#${targetInputName}-input`)
+
+        targetInput.val(newValue)
+
+        if (targetInputName === 'city') {
+            const targetCity = newValue
+
+            // 清空道路選項
+            resetRoadSelect()
+            // 設定鄉鎮市區選項
+            setDictrictItem(targetCity)
+            // 更新詳細地址
+            setDetailAddress()
+        } else if (targetInputName === 'district') {
+            const targetCity = $('#city-input').val()
+            const targetDistrict = newValue
+
+            // 設定道路選項
+            setRoadItem(targetCity, targetDistrict)
+            // 更新詳細地址
+            setDetailAddress()
+        } else if (targetInputName === 'road') {
+            // 清空地址內容
+            $('#address-input').val('')
+            // 更新詳細地址
+            setDetailAddress()
+
+            doGeocode()
+        }
+    }
+    $(document).on('click', '.custom-address-option', function() {
+        const newValue = $(this).data('value')
+        const targetInputName = $(this).data('option-type')
+        const targetInput = $(`#${targetInputName}-input`)
+
+        targetInput.val(newValue)
+
+        if(targetInputName === 'city') {
+            const targetCity = newValue
+
+            // 清空道路選項
+            resetRoadSelect()
+            // 設定鄉鎮市區選項
+            setDictrictItem(targetCity)
+            // 更新詳細地址
+            setDetailAddress()
+        } else if (targetInputName === 'district') {
+            const targetCity = $('#city-input').val()
+            const targetDistrict = newValue
+
+            // 設定道路選項
+            setRoadItem(targetCity, targetDistrict)
+            // 更新詳細地址
+            setDetailAddress()
+        } else if (targetInputName === 'road') {
+            // 清空地址內容
+            $('#address-input').val('')
+            // 更新詳細地址
+            setDetailAddress()
+
+            doGeocode()
+        }
     })
 
     // 更新詳細地址
     function setDetailAddress() {
-        const cityValue = $('#city-input').val()
-        const districtValue = $('#district-input').val()
-        const roadValue = $('#road-input').val()
+        const cityValue = $('#city-custom-select-value').text() === '請選擇縣市' ? "" : $('#city-custom-select-value').text()
+        const districtValue = $('#district-custom-select-value').text() === '請選擇鄉鎮市區' ? "" : $('#district-custom-select-value').text()
+        const roadValue = $('#road-custom-select-value').text() === '請選擇道路名稱' ? "" : $('#road-custom-select-value').text()
 
         $('#detail-address-city').text(cityValue)
         $('#detail-address-district').text(districtValue)
@@ -540,14 +646,31 @@
         });
         geocoder = new google.maps.Geocoder();
 
-        const roadInput = document.getElementById("road-input")
         const addressInput = document.getElementById("address-input")
 
         marker = new google.maps.Marker({ map });
 
-        roadInput.addEventListener("change", function () {
-            doGeocode()
-        });
+        // 編輯模式設定地圖中心、放置圖釘
+        const preLat = $('#address-lat').data('value')
+        const preLng = $('#address-lng').data('value')
+
+        lat = preLat
+        lng = preLng
+
+        if (preLat!== 0 && preLng!== 0) {
+            map.setZoom(15);
+            map.setCenter({
+                lat: preLat,
+                lng: preLng
+            });
+            addMarker(getCurrentAddress(), preLat, preLng)
+        } else {
+            map.setZoom(6);
+            map.setCenter({
+                lat: 23.780149,
+                lng: 121.00203
+            });
+        }
 
         addressInput.addEventListener("change", function() {
             doGeocode()
@@ -555,9 +678,9 @@
     }
 
     function doGeocode() {
-        const cityInput = $('#city-input').val()
-        const districtInput = $('#district-input').val()
-        const roadInput = $('#road-input').val()
+        const cityInput = $('#city-custom-select-value').text()
+        const districtInput = $('#district-custom-select-value').text()
+        const roadInput = $('#road-custom-select-value').text()
         const addressInput = $('#address-input').val()
         geocode({ address: cityInput + districtInput + roadInput + addressInput })
     }
@@ -573,11 +696,6 @@
                 lat = location.lat()
                 lng = location.lng()
 
-                const cityValue = $('#city-input').val()
-                const districtValue = $('#district-input').val()
-                const roadValue = $('#road-input').val()
-                const addressValue = $('#address-input').val()
-
                 addMarker(getCurrentAddress(), lat, lng)
 
                 map.setCenter(results[0].geometry.location);
@@ -590,9 +708,9 @@
     }
 
     function getCurrentAddress() {
-        const cityValue = $('#city-input').val()
-        const districtValue = $('#district-input').val()
-        const roadValue = $('#road-input').val()
+        const cityValue = $('#city-custom-select-value').text()
+        const districtValue = $('#district-custom-select-value').text()
+        const roadValue = $('#road-custom-select-value').text()
         const addressValue = $('#address-input').val()
 
         return cityValue + districtValue + roadValue + addressValue
@@ -605,7 +723,7 @@
     }
 
     function addMarker(addressName, targetLat, targetLng) {
-        const contentString = `<div class="px-4 py-1">${addressName}</div>`
+        const contentString = `<div class="px-2 px-md-3 py-1">${addressName}</div>`
 
         const newInfowindow = new google.maps.InfoWindow({
             content: contentString,

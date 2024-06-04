@@ -62,6 +62,8 @@
                  const emailValue = $('#email-input').val();
                  const passwordValue = $('#password-input').val();
                  const passwordConfirmValue = $('#password-confirm').val();
+
+                 showLoading()
                  if (passwordValue === passwordConfirmValue) {
                      $.ajax({
                          url: window.location.origin + "/User/Register",
@@ -75,8 +77,12 @@
                          success: function (res) {
                              localStorage.setItem("hintMessage", "帳號建立成功")
                              window.location.pathname = '/User/LoginPage'
+                             hideLoading()
                          },
-                         error: function (err) { console.log(err) },
+                         error: function (err) {
+                            showHint(err.responseText)
+                            hideLoading()
+                         },
                      });
                  } else {
                      showHint('再次輸入密碼與密碼不相符')
