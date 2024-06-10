@@ -150,7 +150,6 @@
        }
 
        function addMarker(result) {
-           console.log(result)
            const contentString = `<div class="bg-light px-4 py-1">${result.formatted_address}</div>`
 
            const infowindow = new google.maps.InfoWindow({
@@ -179,7 +178,6 @@
            .create(document.querySelector('#editor'), {
                extraPlugins: [MyCustomUploadAdapterPlugin],})
            .catch(error => {
-               console.log(error);
            });
    </script>
 </body>

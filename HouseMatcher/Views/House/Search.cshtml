@@ -1,4 +1,15 @@
 ﻿@model HouseMatcher.Models.HouseListViewModel
+@section Header {
+    <title>租屋搜尋 HouseMathcer</title>
+    <meta name="description" content="租屋搜尋結果 第 @ViewBag.CurrentPage 頁" />
+    <meta name="keywords" content="HouseMatcher,租屋媒合">
+    <meta name="author" content="陳劭恩">
+    <meta property="og:site_name" content="租屋搜尋 HouseMathcer" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="租屋搜尋 HouseMathcer" />
+    <meta property="og:image" content="" />
+    <meta property="og:description" content="租屋搜尋結果 第 @ViewBag.CurrentPage 頁" />
+}
 <div class="d-flex flex-column align-items-center justify-content-center h-100">
     <div class="my-5 px-3 px-md-0 w-100 d-flex justify-content-center">
         @Html.Partial("SearchArea")
@@ -17,7 +28,7 @@
                             <p class="list-card-content-text">NT$ @house.RentPerMonth/月</p>
                             <p class="list-card-content-text">地點：@HouseAddress</p>
                             <p class="list-card-content-text">坪數：@house.HouseSize 坪</p>
-                            <div class="d-flex">
+                            <div class="feature-label-list">
                                 @{
                                     foreach (var feature in house.FeaturLabelList)
                                     {

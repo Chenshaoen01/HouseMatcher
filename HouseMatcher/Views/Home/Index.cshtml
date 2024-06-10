@@ -1,4 +1,15 @@
 ﻿@model HouseMatcher.Models.HouseListViewModel
+@section Header {
+    <title>HouseMathcer</title>
+    <meta name="description" content="地圖尋屋、即時資訊讓您快速找到理想的租屋" />
+    <meta name="keywords" content="HouseMatcher,租屋媒合">
+    <meta name="author" content="陳劭恩">
+    <meta property="og:site_name" content="HouseMathcer" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="HouseMathcer" />
+    <meta property="og:image" content="" />
+    <meta property="og:description" content="地圖尋屋、即時資訊讓您快速找到理想的租屋" />
+}
 <div class="homepage-header d-flex justify-content-center p-5"
      data-aos="fade-down" data-aos-duration="2000" data-aos-once="true">
     @Html.Partial("SearchArea")
@@ -28,7 +39,7 @@
                         <p class="homepage-carousel-content-text">NT$ @house.RentPerMonth/月</p>
                         <p class="homepage-carousel-content-text">地點：@house.Location</p>
                         <p class="homepage-carousel-content-text">坪數：@house.HouseSize 坪</p>
-                        <div class="d-flex">
+                        <div class="feature-label-list">
                             @{
                                 foreach(var feature in house.FeaturLabelList)
                                 {
@@ -46,7 +57,7 @@
 <div class="main-content mx-auto">
     <div class="containter-fluid">
         <div class="row justify-content-center align-items-stretch mb-5"
-             data-aos="fade-right" data-aos-duration="2000" data-aos-once="true">
+             data-aos="fade-right" data-aos-duration="2000">
             <div class="col-12 col-md-7">
                 <div class="homepage-intro-img-box homepage-intro-img-box-map"></div>
             </div>
@@ -60,7 +71,7 @@
             </div>
         </div>
         <div class="row flex-column-reverse flex-md-row justify-content-center align-items-stretch mb-5"
-             data-aos="fade-left" data-aos-duration="2000" data-aos-once="true">
+             data-aos="fade-left" data-aos-duration="2000">
             <div class="col-12 col-md-5">
                 <div class="d-none d-md-block homepage-intro-line homepage-intro-line-second"></div>
                 <div class="d-flex flex-column align-items-center align-items-md-start my-4">
@@ -118,6 +129,8 @@
         margin: 50,
         nav: true,
         center: true,
+        autoplay: true,
+        autoplayTimeout: 2000,
         responsive: {
             0: {
                 items: 1
@@ -141,8 +154,6 @@
 
 
     // 數字滾動
-    // let targetNumItem = null
-
     function scrollNumber(targetId, digits) {
         const targetNumItem = document.querySelector(`#${targetId}`)
         targetNumItem.querySelectorAll('span[data-value]').forEach((tick, i) => {
@@ -152,7 +163,7 @@
 
         setTimeout(() => {
             targetNumItem.style.width = `${digits.length * 28}px`;
-        }, 100)
+        }, 0)
     }
 
     function addDigit(targetId, digit, fresh) {
@@ -173,12 +184,10 @@
 
         setTimeout(() => {
             firstDigit.className = "visible";
-        }, true ? 0 : 0000);
+        }, true ? 0 : 0);
     }
 
     function setup(targetId, startNum) {
-        // targetNumItem = document.querySelector(`#${targetId}`)
-
         const digits = startNum.toString().split('')
 
         for (let i = 0; i < digits.length; i++) {
@@ -187,19 +196,18 @@
 
         scrollNumber(targetId, ['0'])
 
-        setTimeout(() => scrollNumber(targetId, digits), 0000)
+        setTimeout(() => scrollNumber(targetId, digits), 0)
     }
 
     let isScrolled = false
     $(document).ready(function () {
-        // 定義一個函數來檢查特定元素是否進入了畫面
+        // 檢查元素是否進入了畫面
         function isElementInViewport(el) {
             var rect = el.getBoundingClientRect();
+
             return (
                 rect.top >= 0 &&
-                rect.left >= 0 &&
-                rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-                rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+                rect.bottom <= (window.innerHeight || document.documentElement.clientHeight)
             );
         }
 
@@ -208,7 +216,7 @@
             $('.number-scroll-area').each(function () {
                 if (isElementInViewport(this)) {
                     if (!isScrolled) {
-                        // 如果進入畫面，則執行相應的函數
+                        // 如果進入畫面，則顯示動畫
                         setup('totalPostNum', 521);
                         setup('match-num-this-month', 123);
                     }

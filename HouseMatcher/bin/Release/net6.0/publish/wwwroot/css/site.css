@@ -104,7 +104,7 @@ footer {
 
 @media (max-width: 767.98px) {
     .user-link-box {
-        background-color: #B8D0FF;
+        background-color: lightgray;
         width: 100%;
         bottom: 0px;
     }
@@ -636,7 +636,8 @@ footer {
     border-radius: 5px;
     background-color: white;
     box-shadow: 0 0 1px grey;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: scroll;
     position: absolute;
     bottom: 0;
     transform: translateY(100%);
@@ -790,6 +791,10 @@ footer {
 
 .fs-7 {
     font-size: 14px;
+}
+
+.reverse {
+    transform: rotate(180deg);
 }
 
 @media (max-width: 600px) {

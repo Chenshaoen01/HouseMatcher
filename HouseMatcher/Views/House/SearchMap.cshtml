@@ -1,37 +1,47 @@
 ﻿@model HouseMatcher.Models.HouseListViewModel
+@section Header {
+    <title>地圖尋屋 HouseMathcer</title>
+    <meta name="description" content="地圖尋屋" />
+    <meta name="keywords" content="HouseMatcher,地圖尋屋">
+    <meta name="author" content="陳劭恩">
+    <meta property="og:site_name" content="地圖尋屋 HouseMathcer" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="地圖尋屋 HouseMathcer" />
+    <meta property="og:image" content="" />
+    <meta property="og:description" content="地圖尋屋" />
+}
 
 <div class="d-flex flex-column justify-content-center align-items-center mb-0 py-5 px-3">
     <div class="mb-5 px-md-0 w-100 d-flex justify-content-center">
         @Html.Partial("SearchArea")
     </div>
-    <div id="map" class="search-map"></div>
-</div>
-
-<div>
     @{
-        foreach (var house in Model.HouseList)
+        if (Model.HouseList.Count() > 0)
         {
-            string HouseImgUrl = "/" + @house.HouseImg;
-            string HouseAddress = house.City + house.District + house.Road + house.Location;
-            <div class="map-house-data"
-                 data-house-id="@house.HouseId"
-                 data-house-img="@HouseImgUrl"
-                 data-house-name="@house.HouseName"
-                 data-rent-per-month="@house.RentPerMonth"
-                 data-location="@house.Location"
-                 data-address="@HouseAddress"
-                 data-house-size="@house.HouseSize"
-                 data-house-lat="@house.Latitude"
-                 data-house-lng="@house.Longitude">
-                @{
-                    foreach (var houseFeature in house.FeaturLabelList)
-                    {
-                        <span class="house-feature" data-house-feature="@houseFeature.LabelName"></span>
+            foreach (var house in Model.HouseList)
+            {
+                string HouseImgUrl = "/" + @house.HouseImg;
+                string HouseAddress = house.City + house.District + house.Road + house.Location;
+                <div class="map-house-data"
+                     data-house-id="@house.HouseId"
+                     data-house-img="@HouseImgUrl"
+                     data-house-name="@house.HouseName"
+                     data-rent-per-month="@house.RentPerMonth"
+                     data-location="@house.Location"
+                     data-address="@HouseAddress"
+                     data-house-size="@house.HouseSize"
+                     data-house-lat="@house.Latitude"
+                     data-house-lng="@house.Longitude">
+                    @{
+                        foreach (var houseFeature in house.FeaturLabelList)
+                        {
+                            <span class="house-feature" data-house-feature="@houseFeature.LabelName"></span>
+                        }
                     }
-                }
-            </div>
-        }
-        if (Model.HouseList.Count() == 0)
+                </div>
+            }
+            <div id="map" class="search-map"></div>
+        } else
         {
             <div class="mb-5">
                 <p class="text-center mb-0">
@@ -131,7 +141,7 @@
             <p class="map-infowindow-box-text">NT$ ${houseDataItem.houseRentPerMonth}/月</p>
             <p class="map-infowindow-box-text">地點：${houseDataItem.houseAddress}</p>
             <p class="map-infowindow-box-text">坪數：${houseDataItem.houseSize} 坪</p>
-            <div class="d-flex mt-2">${featureItem}</div>
+            <div class="feature-label-list mt-2">${featureItem}</div>
             <div class="d-flex justify-content-start justify-content-md-end mt-2">
                 <a href="${detailLink}" class="custom-button" type="button">查看詳情</a>
             </div>

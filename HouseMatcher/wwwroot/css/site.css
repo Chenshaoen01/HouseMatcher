@@ -1,6 +1,16 @@
+:root {
+    --dark-primary-color: #800000;
+    --middle-primary-color: #f8eac0;
+    --light-primary-color: #fefac7;
+}
+
+.copy-right {
+    background-color: var(--dark-primary-color);
+}
 
 html {
-    background-color: #D8E5FF;
+    /*background-color: #D8E5FF;*/
+    background-color: var(--light-primary-color);
 }
 
 body{
@@ -12,10 +22,6 @@ body{
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-}
-
-footer {
-    background-color: white;
 }
 
 .main-content {
@@ -43,7 +49,7 @@ footer {
 
 .white-card {
     padding: 2rem;
-    background-color: white;
+    background-color: var(--middle-primary-color);
     border-radius: 25px;
     box-shadow: 0 0 10px #aaaaaa;
 }
@@ -92,7 +98,7 @@ footer {
 
 .user-link-box {
     border: none;
-    background-color: white;
+    background-color: #ffe7d2;
     width: 150px;
     display: flex;
     flex-direction: column;
@@ -104,7 +110,6 @@ footer {
 
 @media (max-width: 767.98px) {
     .user-link-box {
-        background-color: #B8D0FF;
         width: 100%;
         bottom: 0px;
     }
@@ -125,7 +130,7 @@ footer {
 
 .custom-button {
     border: none;
-    background-color: #3e8ede;
+    background-color: var(--dark-primary-color);
     box-shadow: 0 0 1px grey;
     color: white;
     text-decoration: none;
@@ -139,6 +144,26 @@ footer {
 .custom-button-red {
     background-color: red;
 }
+
+/*卷軸 樣式*/
+/* width */
+::-webkit-scrollbar {
+    width: 15px;
+    height: 15px;
+    background-color: var(--light-primary-color);
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background-color: var(--light-primary-color);
+    box-shadow: inset 0 0 3px var(--dark-primary-color);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: var(--dark-primary-color);
+}
+
 /*首頁*/
 .homepage-header {
     background-image: url('/house1.jpg');
@@ -151,7 +176,7 @@ footer {
     width: 100%;
     max-width: 800px;
     border-radius: 50px;
-    background-color: rgb(255, 255, 255, 0.85);
+    background-color: rgb(254, 231, 199, 0.8);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -216,7 +241,7 @@ footer {
 .homepage-introduce-circle {
     width: 100%;
     max-width: 250px;
-    background-color: blue;
+    background-color: var(--dark-primary-color);
     aspect-ratio: 1/1;
     border-radius: 100%;
     display: flex;
@@ -344,7 +369,7 @@ footer {
     display: flex;
     align-items: stretch;
     overflow: hidden;
-    background-color: white;
+    background-color: rgb(254, 221, 199);
     border-radius: 30px;
     box-shadow: 0 0 10px #aaaaaa;
     color: black;
@@ -381,12 +406,19 @@ footer {
     margin-bottom: 0.5rem;
 }
 
+.feature-label-list {
+    display: flex;
+    flex-wrap: wrap;
+}
+
 .feature-label {
-    background-color: #E9E8E8;
+    background-color: #d6d6d6;
     border-radius: 7px;
     padding: 0.25rem 0.5rem;
     margin-right: 0.5rem;
+    margin-bottom: 0.25rem;
     font-size: 10px;
+    white-space: nowrap;
 }
 
 .devider {
@@ -567,7 +599,7 @@ footer {
 
 .navbar {
     z-index: 1050;
-    background-color: white;
+    background-color: var(--dark-primary-color);
 }
 
 .navbar-toggler:focus,
@@ -577,24 +609,34 @@ footer {
     box-shadow: none;
 }
 
-/*.navbar-toggler {
-   border: none;
-}*/
-
 /*覆蓋 bootstrap modal 樣式*/
+.btn-close {
+    filter: invert(1) grayscale(100%) brightness(200%);
+}
+
 .modal-content {
+    border: 0px solid black;
     border-radius: 20px;
     overflow: hidden;
     background-clip: unset;
+    background-color: var(--dark-primary-color);
 }
 
 .modal-header {
-    border-radius: 20px 20px 0 0;
+    background-color: var(--dark-primary-color);
+    color: white;
+    border: none;
+    border-radius: 19px 19px 0 0;
     text-align: center;
+}
+
+.modal-body {
+    background-color: var(--light-primary-color)
 }
 
 .modal-footer {
     padding-top: 0;
+    background-color: var(--light-primary-color);
     border: none;
     border-radius: 0 0 20px 20px;
     overflow: hidden;
@@ -636,7 +678,8 @@ footer {
     border-radius: 5px;
     background-color: white;
     box-shadow: 0 0 1px grey;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
     position: absolute;
     bottom: 0;
     transform: translateY(100%);
@@ -688,30 +731,34 @@ footer {
     cursor: pointer;
 }
 
+/*選取框 卷軸樣式*/
 /* width */
-.custom-options-child-layer::-webkit-scrollbar {
+.custom-options-child-layer::-webkit-scrollbar,
+.custom-options::-webkit-scrollbar {
     width: 10px;
     height: 10px;
     background-color: white;
 }
 
 /* Track */
-.custom-options-child-layer::-webkit-scrollbar-track {
+.custom-options-child-layer::-webkit-scrollbar-track,
+.custom-options::-webkit-scrollbar-track {
     background-color: white;
-    box-shadow: inset 0 0 5px skyblue;
+    box-shadow: inset 0 0 5px var(--dark-primary-color);
     border-radius: 10px;
 }
 
 /* Handle */
-.custom-options-child-layer::-webkit-scrollbar-thumb {
-    background: skyblue;
+.custom-options-child-layer::-webkit-scrollbar-thumb,
+.custom-options::-webkit-scrollbar-thumb {
+    background: var(--dark-primary-color);
     border-radius: 10px;
 }
 
 /*地圖*/
 .search-map {
     border-radius: 5%;
-    box-shadow: 0 0 1px grey;
+    box-shadow: 0 0 1px var(--dark-primary-color);
     width: 100%;
     max-width: 600px;
     aspect-ratio: 1.5/1;
@@ -719,12 +766,12 @@ footer {
 
 .map-box {
     width:100%;
-    height: 250px;
+    height: 300px;
 }
 
 .map-infowindow-box {
-    width: 250px;
-    padding: 0.75rem 1.5rem;
+    width: 230px;
+    padding: 0.75rem 1rem;
 }
 
 .map-infowindow-box-title {
@@ -758,29 +805,9 @@ footer {
 }
 
     .data-list-page-label.selected {
-        background: #3e8ede;
+        background: var(--dark-primary-color);
+        color: white;
     }
-
-/*scroll-bar 樣式*/
-/* width */
-::-webkit-scrollbar {
-    width: 15px;
-    height: 15px;
-    background-color: white;
-}
-
-/* Track */
-::-webkit-scrollbar-track {
-    background-color: white;
-    box-shadow: inset 0 0 5px skyblue;
-    border-radius: 10px;
-}
- 
-/* Handle */
-::-webkit-scrollbar-thumb {
-    background: skyblue; 
-    border-radius: 10px;
-}
 
 
 /*通用類別*/
@@ -790,6 +817,10 @@ footer {
 
 .fs-7 {
     font-size: 14px;
+}
+
+.reverse {
+    transform: rotate(180deg);
 }
 
 @media (max-width: 600px) {

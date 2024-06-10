@@ -1,4 +1,15 @@
 ﻿@model HouseMatcher.Models.HouseListViewModel
+@section Header {
+    <title>房屋資訊管理 HouseMatcher</title>
+    <meta name="description" content="房屋資訊管理 第 @ViewBag.CurrentPage 頁" />
+    <meta name="keywords" content="HouseMatcher,房屋資訊管理">
+    <meta name="author" content="陳劭恩">
+    <meta property="og:site_name" content="房屋資訊管理 HouseMatcher" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="房屋資訊管理 HouseMatcher" />
+    <meta property="og:image" content="" />
+    <meta property="og:description" content="房屋資訊管理 第 @ViewBag.CurrentPage 頁" />
+}
 <div class="d-flex justify-content-center h-100">
     <div class="main-content py-4">
         <div class="d-flex justify-content-end">
@@ -19,11 +30,11 @@
                                     <p class="list-card-content-text">NT$ @house.RentPerMonth/月</p>
                                     <p class="list-card-content-text">地點：@HouseAddress</p>
                                     <p class="list-card-content-text">坪數：@house.HouseSize 坪</p>
-                                    <div class="d-flex">
+                                    <div class="feature-label-list">
                                         @{
                                         foreach (var feature in house.FeaturLabelList)
                                         {
-                                                    <span class="feature-label">@feature.LabelName</span>
+                                           <span class="feature-label">@feature.LabelName</span>
                                         }
                                         }
                                     </div>
@@ -81,7 +92,6 @@
 @Html.Partial("Form")
 
 <script>
-    console.log(localStorage.getItem('need-refresh'))
     if(localStorage.getItem('need-refresh')) {
         location.reload()
         localStorage.removeItem('need-refresh')

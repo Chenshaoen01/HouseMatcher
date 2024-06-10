@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "L7+/GXb7o73+sVmguBSrH3DK7OEF19ZH0NuqErZfYNw=",
+  "Hash": "EcxLFUArckrhY55EpkmOpJlvs3ebWXUUAqBGMP7C3mM=",
   "Source": "HouseMatcher",
   "BasePath": "_content/HouseMatcher",
   "Mode": "Default",
@@ -51,6 +51,23 @@
       "OriginalItemSpec": "C:\\Users\\User\\Desktop\\HouseMatcher\\HouseMatcher\\obj\\Debug\\net6.0\\scopedcss\\projectbundle\\HouseMatcher.bundle.scp.css"
     },
     {
+      "Identity": "C:\\Users\\User\\Desktop\\HouseMatcher\\HouseMatcher\\wwwroot\\03301c1d-36cd-485d-832d-a5ea96294705.jpg",
+      "SourceId": "HouseMatcher",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\User\\Desktop\\HouseMatcher\\HouseMatcher\\wwwroot\\",
+      "BasePath": "_content/HouseMatcher",
+      "RelativePath": "03301c1d-36cd-485d-832d-a5ea96294705.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\03301c1d-36cd-485d-832d-a5ea96294705.jpg"
+    },
+    {
       "Identity": "C:\\Users\\User\\Desktop\\HouseMatcher\\HouseMatcher\\wwwroot\\416b93fe-c08d-4cea-82a4-2ebe501aca9b.jpg",
       "SourceId": "HouseMatcher",
       "SourceType": "Discovered",
@@ -68,12 +85,12 @@
       "OriginalItemSpec": "wwwroot\\416b93fe-c08d-4cea-82a4-2ebe501aca9b.jpg"
     },
     {
-      "Identity": "C:\\Users\\User\\Desktop\\HouseMatcher\\HouseMatcher\\wwwroot\\98c7b9e3-a991-40fa-a7f7-18ace543819d.jpg",
+      "Identity": "C:\\Users\\User\\Desktop\\HouseMatcher\\HouseMatcher\\wwwroot\\76d3b527-1f81-4014-ad9f-631d33cc7a9a.jpg",
       "SourceId": "HouseMatcher",
       "SourceType": "Discovered",
       "ContentRoot": "C:\\Users\\User\\Desktop\\HouseMatcher\\HouseMatcher\\wwwroot\\",
       "BasePath": "_content/HouseMatcher",
-      "RelativePath": "98c7b9e3-a991-40fa-a7f7-18ace543819d.jpg",
+      "RelativePath": "76d3b527-1f81-4014-ad9f-631d33cc7a9a.jpg",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -82,7 +99,7 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\98c7b9e3-a991-40fa-a7f7-18ace543819d.jpg"
+      "OriginalItemSpec": "wwwroot\\76d3b527-1f81-4014-ad9f-631d33cc7a9a.jpg"
     },
     {
       "Identity": "C:\\Users\\User\\Desktop\\HouseMatcher\\HouseMatcher\\wwwroot\\css\\site.css",
@@ -119,12 +136,12 @@
       "OriginalItemSpec": "wwwroot\\e4b3087b-8c1e-430e-92eb-c88451af9889.jpg"
     },
     {
-      "Identity": "C:\\Users\\User\\Desktop\\HouseMatcher\\HouseMatcher\\wwwroot\\favicon.ico",
+      "Identity": "C:\\Users\\User\\Desktop\\HouseMatcher\\HouseMatcher\\wwwroot\\favicon.png",
       "SourceId": "HouseMatcher",
       "SourceType": "Discovered",
       "ContentRoot": "C:\\Users\\User\\Desktop\\HouseMatcher\\HouseMatcher\\wwwroot\\",
       "BasePath": "_content/HouseMatcher",
-      "RelativePath": "favicon.ico",
+      "RelativePath": "favicon.png",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -133,7 +150,7 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\favicon.ico"
+      "OriginalItemSpec": "wwwroot\\favicon.png"
     },
     {
       "Identity": "C:\\Users\\User\\Desktop\\HouseMatcher\\HouseMatcher\\wwwroot\\homepage-intro-img-box-map.jpg",
@@ -8976,6 +8993,23 @@
       "OriginalItemSpec": "wwwroot\\matcher-logo-rectangle.png"
     },
     {
+      "Identity": "C:\\Users\\User\\Desktop\\HouseMatcher\\HouseMatcher\\wwwroot\\matcher-logo-rectangle-light.png",
+      "SourceId": "HouseMatcher",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\User\\Desktop\\HouseMatcher\\HouseMatcher\\wwwroot\\",
+      "BasePath": "_content/HouseMatcher",
+      "RelativePath": "matcher-logo-rectangle-light.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\matcher-logo-rectangle-light.png"
+    },
+    {
       "Identity": "C:\\Users\\User\\Desktop\\HouseMatcher\\HouseMatcher\\wwwroot\\matcher-logo-square.png",
       "SourceId": "HouseMatcher",
       "SourceType": "Discovered",
@@ -8991,6 +9025,57 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\matcher-logo-square.png"
+    },
+    {
+      "Identity": "C:\\Users\\User\\Desktop\\HouseMatcher\\HouseMatcher\\wwwroot\\matcher-logo-square-light.png",
+      "SourceId": "HouseMatcher",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\User\\Desktop\\HouseMatcher\\HouseMatcher\\wwwroot\\",
+      "BasePath": "_content/HouseMatcher",
+      "RelativePath": "matcher-logo-square-light.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\matcher-logo-square-light.png"
+    },
+    {
+      "Identity": "C:\\Users\\User\\Desktop\\HouseMatcher\\HouseMatcher\\wwwroot\\signalr.js\\jquery.signalR.js",
+      "SourceId": "HouseMatcher",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\User\\Desktop\\HouseMatcher\\HouseMatcher\\wwwroot\\",
+      "BasePath": "_content/HouseMatcher",
+      "RelativePath": "signalr.js/jquery.signalR.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\signalr.js\\jquery.signalR.js"
+    },
+    {
+      "Identity": "C:\\Users\\User\\Desktop\\HouseMatcher\\HouseMatcher\\wwwroot\\signalr.js\\jquery.signalR.min.js",
+      "SourceId": "HouseMatcher",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\User\\Desktop\\HouseMatcher\\HouseMatcher\\wwwroot\\",
+      "BasePath": "_content/HouseMatcher",
+      "RelativePath": "signalr.js/jquery.signalR.min.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\signalr.js\\jquery.signalR.min.js"
     }
   ]
 }

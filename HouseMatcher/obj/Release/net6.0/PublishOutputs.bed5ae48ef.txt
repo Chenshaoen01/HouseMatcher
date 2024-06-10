@@ -1,4 +1,5 @@
 C:\Users\User\Desktop\HouseMatcher\HouseMatcher\obj\Release\net6.0\PubTmp\Out\HouseMatcher.exe
+C:\Users\User\Desktop\HouseMatcher\HouseMatcher\obj\Release\net6.0\PubTmp\Out\web.config
 C:\Users\User\Desktop\HouseMatcher\HouseMatcher\obj\Release\net6.0\PubTmp\Out\appsettings.Development.json
 C:\Users\User\Desktop\HouseMatcher\HouseMatcher\obj\Release\net6.0\PubTmp\Out\appsettings.json
 C:\Users\User\Desktop\HouseMatcher\HouseMatcher\obj\Release\net6.0\PubTmp\Out\libman.json

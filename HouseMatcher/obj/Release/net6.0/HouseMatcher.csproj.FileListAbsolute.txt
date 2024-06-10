@@ -70,3 +70,4 @@ C:\Users\User\Desktop\HouseMatcher\HouseMatcher\obj\Release\net6.0\refint\HouseM
 C:\Users\User\Desktop\HouseMatcher\HouseMatcher\obj\Release\net6.0\HouseMatcher.pdb
 C:\Users\User\Desktop\HouseMatcher\HouseMatcher\obj\Release\net6.0\HouseMatcher.genruntimeconfig.cache
 C:\Users\User\Desktop\HouseMatcher\HouseMatcher\obj\Release\net6.0\ref\HouseMatcher.dll
+C:\Users\User\Desktop\HouseMatcher\HouseMatcher\bin\Release\net6.0\web.config

@@ -3,14 +3,27 @@
     bool isHouseDataExist = Model.HouseList.Count() > 0;
     bool isHouseOwner = false;
     bool isLogIn = User.Identity.IsAuthenticated;
-    HouseDataGetDto DetailHouseData = new HouseDataGetDto() { };
+    HouseDataGetDto DetailHouseData = isHouseDataExist? Model.HouseList[0] : new HouseDataGetDto() { };
+
+    string HouseImgUrl = "/" + @DetailHouseData.HouseImg;
+    string HouseAddress = DetailHouseData.City + DetailHouseData.District + DetailHouseData.Road + DetailHouseData.Location;
+}
+@section Header {
+    <title>@DetailHouseData.HouseName HouseMatcher</title>
+    <meta name="description" content="租金：NT$ @DetailHouseData.RentPerMonth /月 地點：@HouseAddress 坪數：@DetailHouseData.HouseSize 坪" />
+    <meta name="keywords" content="HouseMatcher,租屋媒合">
+    <meta name="author" content="陳劭恩">
+    <meta property="og:site_name" content="HouseMathcer房屋詳細資訊-@DetailHouseData.HouseName" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="HouseMathcer房屋詳細資訊-@DetailHouseData.HouseName" />
+    <meta property="og:image" content="@HouseImgUrl" />
+    <meta property="og:description" content="租金：NT$ @DetailHouseData.RentPerMonth /月 地點：@HouseAddress 坪數：@DetailHouseData.HouseSize 坪" />
 }
 <div class="d-flex justify-content-center h-100">
     <div class="main-content my-5">
         @{
             if (isHouseDataExist)
             {
-                DetailHouseData = Model.HouseList[0];
                 string UserId = "";
         
                 if (isLogIn)
@@ -38,9 +51,6 @@
                                 }
                             }
                         </div>
-                        @{
-                            string HouseImgUrl = "/" + @DetailHouseData.HouseImg;
-                        }
                         <div class="house-detail-img mb-3" style="background-image: url('@HouseImgUrl')"
                              data-bs-toggle="modal" data-bs-target="#house-img-modal">
                             <div class="house-detail-img-hover">
@@ -48,9 +58,6 @@
                             </div>
                         </div>
                         <p>租金：NT$ @DetailHouseData.RentPerMonth /月</p>
-                        @{
-                            string HouseAddress = DetailHouseData.City + DetailHouseData.District + DetailHouseData.Road + DetailHouseData.Location;
-                        }
                         <p>地點：@HouseAddress</p>
                         <p>坪數：@DetailHouseData.HouseSize 坪</p>
                         <div class="d-flex">

@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "txPHuBLYIvXetEkVu2NvsrrhhIdfwA7l/r7kYt6Ymbg=",
+  "Hash": "afM5/YghSeGSQFwN/S6ggJpRu/td5kolaIO0YzkDiM0=",
   "Source": "HouseMatcher",
   "BasePath": "_content/HouseMatcher",
   "Mode": "Default",
@@ -66,23 +66,6 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\416b93fe-c08d-4cea-82a4-2ebe501aca9b.jpg"
-    },
-    {
-      "Identity": "C:\\Users\\User\\Desktop\\HouseMatcher\\HouseMatcher\\wwwroot\\98c7b9e3-a991-40fa-a7f7-18ace543819d.jpg",
-      "SourceId": "HouseMatcher",
-      "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\User\\Desktop\\HouseMatcher\\HouseMatcher\\wwwroot\\",
-      "BasePath": "_content/HouseMatcher",
-      "RelativePath": "98c7b9e3-a991-40fa-a7f7-18ace543819d.jpg",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\98c7b9e3-a991-40fa-a7f7-18ace543819d.jpg"
     },
     {
       "Identity": "C:\\Users\\User\\Desktop\\HouseMatcher\\HouseMatcher\\wwwroot\\css\\site.css",

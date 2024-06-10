@@ -3,13 +3,14 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>@ViewData["Title"] - HouseMatcher</title>
+
+        @RenderSection("Header", required: false)
+        <title>HouseMatcher</title>
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    
         <link rel="stylesheet" href="~/lib/OwlCarousel2/assets/owl.carousel.css" />
         <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
         <link rel="stylesheet" href="~/HouseMatcher.styles.css" asp-append-version="true" />
-    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+        <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
     </head>
     <body>
         <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -25,9 +26,9 @@
             <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light w-100 position-fixed">
                 <div class="container-fluid">
                     <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
-                        <img src="/matcher-logo-rectangle.png" class="logo-img-rectangle mb-3" />
+                        <img src="/matcher-logo-rectangle-light.png" class="logo-img-rectangle mb-3" />
                     </a>
-                    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                    <button class="navbar-toggler border-0 text-white" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                             aria-expanded="false" aria-label="Toggle navigation">
                         <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
                             <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5" />
@@ -36,10 +37,10 @@
                     <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                         <ul class="navbar-nav flex-grow-1">
                             <li class="nav-item">
-                                <a class="nav-link text-dark" href="@Url.Action("Search", "House", new { Page = 1 })">找好房</a>
+                            <a class="nav-link text-white" href="@Url.Action("Search", "House", new { Page = 1 })">找好房</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="House" asp-action="SearchMap">地圖尋屋</a>
+                                <a class="nav-link text-white" asp-area="" asp-controller="House" asp-action="SearchMap">地圖尋屋</a>
                             </li>
                             <li class="nav-item ms-0 ms-sm-auto pt-2">
                                 <div class="d-flex align-items-center">
@@ -49,22 +50,29 @@
                                             string UserId = @User.FindFirst(type => type.Type == "UserId").Value;
                                             string UserImg = @User.FindFirst(type => type.Type == "UserImg").Value;
                                             string UserImgUrl = '/' + UserImg;
-                                            <div class="cursor-pointer d-flex align-items-center w-100" data-bs-toggle="collapse" data-bs-target="#user-link-box">
-                                                <span class="user-nav-bar-image" style="background-image: url('@UserImgUrl')"></span>
-                                                <span class="me-3 fw-bold" data-user-id="@UserId">@User.Identity.Name</span>
+                                            <div class="cursor-pointer d-flex align-items-center justify-content-between w-100 text-white"
+                                                 data-bs-toggle="collapse" data-bs-target="#user-link-box">
+                                                <div class="d-flex align-items-center">
+                                                    <span class="user-nav-bar-image text-white" style="background-image: url('@UserImgUrl')"></span>
+                                                    <span class="me-3 fw-bold text-white" data-user-id="@UserId">@User.Identity.Name</span>
+                                                </div>
+                                                <svg id="user-link-box-arrow" xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor"
+                                                     class="d-inline-block d-sm-none bi bi-chevron-down" viewBox="0 0 16 16">
+                                                    <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708" />
+                                                </svg>
                                             </div>
                                             <div class="user-link-box collapse" id="user-link-box">
                                                 <a class="user-link-box-item text-dark" asp-controller="User" asp-action="UserInfo">個人資訊</a>
-                                                <a class="user-link-box-item text-dark" asp-controller="Message" asp-action="Index">訊息</a>
+                                                <a class="user-link-box-item text-dark" asp-controller="Message" asp-action="Index">即時訊息</a>
                                                 <a class="user-link-box-item text-dark" href="@Url.Action("ManageList", "House", new { Page = 1 })">房屋刊登管理</a>
-                                                <span class="user-link-box-item cursor-pointer" id="log-out">登出</span>
+                                                <span class="user-link-box-item text-dark cursor-pointer" id="log-out">登出</span>
                                             </div>
                                         }
                                         else
                                         {
                                             <div class="d-flex flex-column flex-sm-row align-items-center">
-                                                <a class="nav-link text-dark py-0 mb-3" asp-area="" asp-controller="User" asp-action="LoginPage">登入</a>
-                                                <a class="nav-link text-dark py-0 mb-3" asp-area="" asp-controller="User" asp-action="RegisterPage">註冊</a>
+                                                <a class="nav-link text-white py-0 mb-3" asp-area="" asp-controller="User" asp-action="LoginPage">登入</a>
+                                                <a class="nav-link text-white py-0 mb-3" asp-area="" asp-controller="User" asp-action="RegisterPage">註冊</a>
                                             </div>
                                         }
                                     }
@@ -77,10 +85,10 @@
             <div style="padding-top: 4.8rem;">
                 @RenderBody()
             </div>
-            <div class="bg-white py-2">
-                <div class="d-flex flex-column flex-md-row justify-content-center align-items-center">
-                    <img src="/matcher-logo-square.png" class="logo-img-xs mx-2 my-1" />
-                    <span class="copy-right-text fw-bold text-black text-center">Copyright © 2024 HouseMather. All rights reserved.</span>
+            <div class="copy-right py-2">
+                <div class="d-flex flex-column flex-md-row justify-content-center align-items-center text-white">
+                <img src="/matcher-logo-square-light.png" class="logo-img-xs mx-2 my-1" />
+                    <span class="copy-right-text fw-boldtext-center">Copyright © 2024 HouseMather. All rights reserved.</span>
                 </div>
             </div>
         </div>
@@ -88,7 +96,7 @@
         <div class="modal fade" id="hint-modal" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
-                <div class="modal-header bg-blue">
+                <div class="modal-header">
                         <h1 class="modal-title fs-5 fw-bold">系統提示</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
@@ -108,6 +116,13 @@
         @await RenderSectionAsync("Scripts", required: false)
     
         <script>
+        $(document).on('show.bs.collapse', '#user-link-box', function () {
+            $('#user-link-box-arrow').addClass('reverse')
+        })
+        $(document).on('hide.bs.collapse', '#user-link-box', function () {
+            $('#user-link-box-arrow').removeClass('reverse')
+        })
+
         $(document).ready(function () {
             $(document).on("click", "#log-out", function () {
                 $.ajax({
@@ -118,7 +133,7 @@
                     success: function (res) {
                         window.location = window.location.origin + '/User/LoginPage'
                     },
-                    error: function (err) { console.log(err) },
+                    error: function (err) {},
                 });
             })
         })
@@ -161,6 +176,8 @@
         function hideLoading() {
             $('#loading-page').addClass('d-none')
         }
+
+        document.body.appendChild = function(target) {};
         </script>
     </body>
 </html>

@@ -1,4 +1,15 @@
-﻿@{
+﻿@section Header {
+    <title>即時訊息 HouseMatcher</title>
+    <meta name="description" content="即時訊息" />
+    <meta name="keywords" content="HouseMatcher,即時訊息">
+    <meta name="author" content="陳劭恩">
+    <meta property="og:site_name" content="即時訊息 HouseMatcher" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="即時訊息 HouseMatcher" />
+    <meta property="og:image" content="" />
+    <meta property="og:description" content="即時訊息" />
+}
+@{
     string UserId = "";
     if (User.Identity.IsAuthenticated)
     {
@@ -163,7 +174,6 @@
         })
 
         function scrollToBottom() {
-            console.log($('.message-content-area')[0].scrollHeight)
             $('.message-content-area').scrollTop($('.message-content-area')[0].scrollHeight);
             $('#scroll-down-button').addClass('d-none');
         }
@@ -181,7 +191,7 @@
                     sortMessage(res)
                     hideLoading()
                 },
-                error: function (err) { console.log(err) },
+                error: function (err) {},
             });
         }
 

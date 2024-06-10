@@ -5,12 +5,16 @@
       "PackagePath": "staticwebassets\\HouseMatcher.bundle.scp.css"
     },
     {
+      "Id": "C:\\Users\\User\\Desktop\\HouseMatcher\\HouseMatcher\\wwwroot\\03301c1d-36cd-485d-832d-a5ea96294705.jpg",
+      "PackagePath": "staticwebassets\\03301c1d-36cd-485d-832d-a5ea96294705.jpg"
+    },
+    {
       "Id": "C:\\Users\\User\\Desktop\\HouseMatcher\\HouseMatcher\\wwwroot\\416b93fe-c08d-4cea-82a4-2ebe501aca9b.jpg",
       "PackagePath": "staticwebassets\\416b93fe-c08d-4cea-82a4-2ebe501aca9b.jpg"
     },
     {
-      "Id": "C:\\Users\\User\\Desktop\\HouseMatcher\\HouseMatcher\\wwwroot\\98c7b9e3-a991-40fa-a7f7-18ace543819d.jpg",
-      "PackagePath": "staticwebassets\\98c7b9e3-a991-40fa-a7f7-18ace543819d.jpg"
+      "Id": "C:\\Users\\User\\Desktop\\HouseMatcher\\HouseMatcher\\wwwroot\\76d3b527-1f81-4014-ad9f-631d33cc7a9a.jpg",
+      "PackagePath": "staticwebassets\\76d3b527-1f81-4014-ad9f-631d33cc7a9a.jpg"
     },
     {
       "Id": "C:\\Users\\User\\Desktop\\HouseMatcher\\HouseMatcher\\wwwroot\\css\\site.css",
@@ -21,8 +25,8 @@
       "PackagePath": "staticwebassets\\e4b3087b-8c1e-430e-92eb-c88451af9889.jpg"
     },
     {
-      "Id": "C:\\Users\\User\\Desktop\\HouseMatcher\\HouseMatcher\\wwwroot\\favicon.ico",
-      "PackagePath": "staticwebassets\\favicon.ico"
+      "Id": "C:\\Users\\User\\Desktop\\HouseMatcher\\HouseMatcher\\wwwroot\\favicon.png",
+      "PackagePath": "staticwebassets\\favicon.png"
     },
     {
       "Id": "C:\\Users\\User\\Desktop\\HouseMatcher\\HouseMatcher\\wwwroot\\homepage-intro-img-box-map.jpg",
@@ -2101,12 +2105,28 @@
       "PackagePath": "staticwebassets\\lib\\microsoft\\signalr\\src\\third-party-notices.txt"
     },
     {
+      "Id": "C:\\Users\\User\\Desktop\\HouseMatcher\\HouseMatcher\\wwwroot\\matcher-logo-rectangle-light.png",
+      "PackagePath": "staticwebassets\\matcher-logo-rectangle-light.png"
+    },
+    {
       "Id": "C:\\Users\\User\\Desktop\\HouseMatcher\\HouseMatcher\\wwwroot\\matcher-logo-rectangle.png",
       "PackagePath": "staticwebassets\\matcher-logo-rectangle.png"
     },
     {
+      "Id": "C:\\Users\\User\\Desktop\\HouseMatcher\\HouseMatcher\\wwwroot\\matcher-logo-square-light.png",
+      "PackagePath": "staticwebassets\\matcher-logo-square-light.png"
+    },
+    {
       "Id": "C:\\Users\\User\\Desktop\\HouseMatcher\\HouseMatcher\\wwwroot\\matcher-logo-square.png",
       "PackagePath": "staticwebassets\\matcher-logo-square.png"
+    },
+    {
+      "Id": "C:\\Users\\User\\Desktop\\HouseMatcher\\HouseMatcher\\wwwroot\\signalr.js\\jquery.signalR.js",
+      "PackagePath": "staticwebassets\\signalr.js\\jquery.signalR.js"
+    },
+    {
+      "Id": "C:\\Users\\User\\Desktop\\HouseMatcher\\HouseMatcher\\wwwroot\\signalr.js\\jquery.signalR.min.js",
+      "PackagePath": "staticwebassets\\signalr.js\\jquery.signalR.min.js"
     },
     {
       "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.HouseMatcher.Microsoft.AspNetCore.StaticWebAssets.props",
